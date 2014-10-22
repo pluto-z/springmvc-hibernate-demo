@@ -3,22 +3,24 @@ package com.ptsisi.daily.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.ptsisi.daily.User;
+import org.hibernate.validator.constraints.Length;
 
 @Entity(name = "org.ptsisi.keyword.User")
-@Table(name = "pt_user")
+@Table(name = "pt_users")
 public class UserBean extends IntegerIdTimeObject implements User {
 
   private static final long serialVersionUID = -3737262583650533418L;
 
-  @Column(name = "username", length = 20, unique = true, nullable = false)
+  @Column(length = 20, unique = true, nullable = false)
   private String username;
-  @Column(name = "password", length = 100, nullable = false)
+  @Column(length = 100, nullable = false)
   private String password;
-  @Column(name = "fullname", length = 100, nullable = false)
+  @Column(length = 100, nullable = false)
   private String fullname;
-  @Column(name = "email", length = 50, nullable = false)
+  @Column(length = 50, nullable = false)
   private String email;
 
   /*
