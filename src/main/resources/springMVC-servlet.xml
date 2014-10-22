@@ -16,7 +16,6 @@
     <bean id="fmXmlEscape"
           class="freemarker.template.utility.XmlEscape" />
 
-    <bean id="head" class="com.ptsisi.view.template.HeadTemplate"/>
     <!-- freemarker的配置 -->
 	<bean id="freemarkerConfigurer"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
@@ -25,9 +24,9 @@
         <property name="freemarkerVariables">
             <map>
                 <entry key="xml_escape" value-ref="fmXmlEscape"/>
-                <entry key="p_head" value-ref="head"/>
             </map>
         </property>
+
 		<property name="freemarkerSettings">
 			<props>
 				<prop key="template_update_delay">0</prop>
@@ -41,11 +40,14 @@
                 <prop key="time_format">HH:mm:ss</prop>
                 <prop key="number_format">0.######</prop>
                 <prop key="whitespace_stripping">true</prop>
+                <prop key="auto_import">common/spring.ftl as s,common/base.ftl as b</prop>
 			</props>
 		</property>
 	</bean>
 
-	<!-- FreeMarker视图解析 如返回userinfo。。在这里配置后缀名ftl和视图解析器。。 -->
+    <bean name="agentMethodModel" class="com.ptsisi.freemarker.AgentMethodModel"/>
+    <bean id="requestProviderMothodModel" class="com.ptsisi.freemarker.RequestProviderMothodModel"/>
+    <!-- FreeMarker视图解析 如返回userinfo。。在这里配置后缀名ftl和视图解析器。。 -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="cache" value="false" />
@@ -56,8 +58,14 @@
 		<property name="exposeRequestAttributes" value="true" />
 		<property name="exposeSessionAttributes" value="true" />
 		<property name="exposeSpringMacroHelpers" value="true" />
-        <property name="requestContextAttribute" value="request"/>
-</bean>
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="attributesMap">
+            <map>
+                <entry key="agent" value-ref="agentMethodModel"/>
+                <entry key="fetchRequest" value-ref="requestProviderMothodModel"/>
+            </map>
+        </property>
+    </bean>
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource"

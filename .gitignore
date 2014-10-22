@@ -15,3 +15,7 @@ hs_err_pid*
 *.iml
 # backup files
 *~
+
+bin
+
+src/main/webapp/META-INF/context.xml
