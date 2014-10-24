@@ -16,8 +16,8 @@ public abstract class IntegerIdObject implements Entity {
 
 	@NotNull
 	@Id
-	@GenericGenerator(name = "generator", strategy = "increment")
-	@GeneratedValue(generator = "generator")
+	@GenericGenerator(name = "daily_custom", strategy = "com.ptsisi.hibernate.TableSeqGenerator")
+	@GeneratedValue(generator = "daily_custom")
 	private Integer id;
 
 	public Integer getId() {

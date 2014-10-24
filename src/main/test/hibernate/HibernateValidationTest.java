@@ -1,4 +1,4 @@
-package hibernateValidationTest;
+package hibernate;
 
 import com.ptsisi.daily.User;
 import com.ptsisi.daily.model.UserBean;
