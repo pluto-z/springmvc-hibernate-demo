@@ -42,4 +42,5 @@ public interface User extends Entity, TimeEntity {
    */
   public void setEmail(String email);
 
+
 }

@@ -84,8 +84,8 @@ h1 {
 <script>
     $(function(){
         $("form[name='loginForm']").validity(function(){
-            $("input[name='username']").require().match('email').maxLength(10);
-            $("input[name='password']").require().maxLength(8).minLength(6);
+            $("input[name='username']").require().match('email').maxLength(32);
+            $("input[name='password']").require().maxLength(16).minLength(6);
         })
     })
 </script>

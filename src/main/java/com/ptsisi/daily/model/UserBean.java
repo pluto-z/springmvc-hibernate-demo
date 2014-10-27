@@ -1,14 +1,13 @@
 package com.ptsisi.daily.model;
 
+import com.ptsisi.daily.Role;
 import com.ptsisi.daily.User;
 import com.ptsisi.daily.model.base.IntegerIdTimeObject;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "org.ptsisi.keyword.User")
@@ -31,6 +30,27 @@ public class UserBean extends IntegerIdTimeObject implements User {
 	@Length(max = 50)
 	@NotNull
 	private String email;
+
+	private boolean enabled;
+
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoleBean.class)
+	private Role role;
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	/*
 	 * (non-Javadoc)

@@ -5,7 +5,7 @@
     <artifactId>daily</artifactId>
     <packaging>war</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>baiduKeyworkSearch Maven Webapp</name>
+    <name>Daily Webapp</name>
     <url>http://maven.apache.org</url>
     <properties>
         <servletapi.version>3.1.0</servletapi.version>
@@ -221,6 +221,11 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <build>
