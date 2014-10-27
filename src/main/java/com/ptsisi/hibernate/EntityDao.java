@@ -20,5 +20,5 @@ public interface EntityDao<T> {
 
 	public void remove(Serializable id);
 
-	public <T> T findUniqueBy(String propertyName, Object value);
+	public T findUniqueBy(String propertyName, Object value);
 }

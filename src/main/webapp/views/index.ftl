@@ -59,7 +59,7 @@
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-user"></span>
 						</span>
-                    <input type="text" title="用户名" value="" name="username" placeholder="请输入邮箱" class="form-control input-lg"/>
+                    <input type="text" title="用户名" value="${username!?js_string}" name="username" placeholder="请输入邮箱" class="form-control input-lg"/>
                 </p>
                 <p class="input-group">
 						<span class="input-group-addon">
@@ -68,13 +68,13 @@
                     <input type="password" title="密码" name="password" class="form-control input-lg"/>
                 </p>
                 [#if needCaptcha??]
-                    <p class="input-group">
-						<span class="input-group-addon">
-							<span class="glyphicon glyphicon-align-justify"></span>
-						</span>
-                        <input type="input" title="验证码" name="captcha" class="form-control input-lg"/>
-                        <img src="captcha.action" alt="显示图片" id="captcha"/>
-                    </p>
+                	<p class="input-group">
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-align-justify"></span>
+							</span>
+                    	<input type="text" title="验证码" name="captcha" class="form-control input-lg" style="width:50%"/>
+                    	<img src="captcha.action" alt="显示图片" id="captcha" class="pull-right" style="width:45%;height: 46px;"/>
+                	</p>
                 [/#if]
                 <p class="text-center">
                     <input type="checkbox" name="rememberMe" />下次自动登录
@@ -89,13 +89,22 @@
 </div>
 </body>
 <script type="text/javascript" src="static/plugins/jquery/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="static/plugins/validity/js/jquery.validity.min.js"></script>
+<script type="text/javascript" src="static/plugins/validity/js/jquery.validity.js"></script>
 <script type="text/javascript" src="static/plugins/validity/lang/jquery.validity.lang.zh.js"></script>
 <script>
     $(function(){
+    	[#if cmsg??]
+    		$.validity.outputs.tooltip.raise($("input[name='captcha']"),"${cmsg}");
+    	[/#if]
+    	[#if umsg??]
+    		$.validity.outputs.tooltip.raise($("input[name='username']"),"${umsg}");
+    	[/#if]
         $("form[name='loginForm']").validity(function(){
             $("input[name='username']").require().match('email').maxLength(32);
             $("input[name='password']").require().maxLength(16).minLength(6);
+         	[#if needCaptcha??]
+         	$("input[name='captcha']").require();
+         	[/#if]
         });
         $("#captcha").click(function(){
            this.src = this.src+"?d=" + new Date().getTime();

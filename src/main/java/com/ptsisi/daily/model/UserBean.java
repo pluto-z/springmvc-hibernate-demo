@@ -1,14 +1,19 @@
 package com.ptsisi.daily.model;
 
-import com.ptsisi.daily.Role;
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.model.base.IntegerIdTimeObject;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import com.ptsisi.daily.Role;
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.model.base.IntegerIdTimeObject;
 
 @Entity(name = "org.ptsisi.keyword.User")
 @Table(name = "sys_users")

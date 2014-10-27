@@ -1,12 +1,12 @@
 package com.ptsisi.daily;
 
-import java.util.List;
 import java.util.Set;
 
 /**
  * Created by zhaoding on 14-10-27.
  */
 public interface Permission extends Entity {
+	
 	Permission getParent();
 
 	void setParent(Permission parent);

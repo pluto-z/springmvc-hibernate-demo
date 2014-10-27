@@ -1,13 +1,20 @@
 package com.ptsisi.freemarker.model;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import static com.ptsisi.freemarker.model.Engine.Gecko;
+import static com.ptsisi.freemarker.model.Engine.Khtml;
+import static com.ptsisi.freemarker.model.Engine.Other;
+import static com.ptsisi.freemarker.model.Engine.Presto;
+import static com.ptsisi.freemarker.model.Engine.Trident;
+import static com.ptsisi.freemarker.model.Engine.WebKit;
+import static com.ptsisi.freemarker.model.Engine.Word;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static com.ptsisi.freemarker.model.Engine.*;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 /**
  * Created by zhaoding on 14-10-22.
  */

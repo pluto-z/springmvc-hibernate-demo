@@ -1,13 +1,14 @@
 package com.ptsisi.daily.model.base;
 
-import com.ptsisi.daily.Entity;
-import com.ptsisi.daily.predicate.ValidEntityKeyPredicate;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.ptsisi.daily.Entity;
+import com.ptsisi.daily.predicate.ValidEntityKeyPredicate;
 
 @MappedSuperclass
 public abstract class IntegerIdObject implements Entity {

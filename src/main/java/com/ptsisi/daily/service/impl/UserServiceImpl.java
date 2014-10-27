@@ -1,16 +1,16 @@
 package com.ptsisi.daily.service.impl;
 
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.dao.UserManager;
-import com.ptsisi.daily.dao.impl.UserManagerImpl;
-import com.ptsisi.daily.service.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.dao.UserManager;
+import com.ptsisi.daily.service.UserService;
 
 /**
  * Created by zhaoding on 14-10-27.

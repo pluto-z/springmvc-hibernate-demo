@@ -1,19 +1,22 @@
 package com.ptsisi.freemarker.model;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by zhaoding on 14-10-22.
  */
 public class Browser implements Serializable, Comparable<Browser> {
 
+	private static final long serialVersionUID = 2533277459911992343L;
+
 	public static Map<String, Browser> browsers = new HashMap<String, Browser>();
 
-	public static final Browser UNKNOWN = new Browser(BrowserCategory.Unknown, null);
+	public static final Browser UNKNOWN = new Browser(BrowserCategory.Unknown,
+			null);
 
 	public final BrowserCategory category;
 	public final String version;
@@ -27,7 +30,7 @@ public class Browser implements Serializable, Comparable<Browser> {
 	/**
 	 * Iterates over all Browsers to compare the browser signature with the user
 	 * agent string. If no match can be found Browser.UNKNOWN will be returned.
-	 *
+	 * 
 	 * @param agentString
 	 * @return Browser
 	 */
