@@ -1,22 +1,20 @@
 package com.ptsisi.daily.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.Sets;
+import com.ptsisi.common.model.IntegerIdTimeObject;
+import com.ptsisi.daily.Role;
+import com.ptsisi.daily.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ptsisi.daily.Role;
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.model.base.IntegerIdTimeObject;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Blob;
+import java.util.Set;
 
 @Entity(name = "org.ptsisi.keyword.User")
-@Table(name = "sys_users")
+@Table(name = "SYS_USERS")
 public class UserBean extends IntegerIdTimeObject implements User {
 
 	private static final long serialVersionUID = -3737262583650533418L;
@@ -25,100 +23,89 @@ public class UserBean extends IntegerIdTimeObject implements User {
 	@Length(max = 32)
 	@Column(unique = true)
 	private String username;
+
 	@NotBlank
-	@Length(max = 16, min = 6)
+	private String salt;
+
+	@NotBlank
+	@Length(max = 100)
 	private String password;
 	@NotBlank
 	@Length(max = 100)
-	private String fullname;
+	private String fullName;
 	@Email
 	@Length(max = 50)
 	@NotNull
 	private String email;
+	@Lob
+	private Blob avatar;
 
 	private boolean enabled;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoleBean.class)
-	private Role role;
+	@ManyToMany(targetEntity = RoleBean.class, mappedBy = "users", fetch = FetchType.LAZY)
+	private Set<Role> roles = Sets.newHashSet();
 
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#getUsername()
-	 */
-	public String getUsername() {
+	@Override public String getUsername() {
 		return username;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#setUsername(java.lang.String)
-	 */
-	public void setUsername(String username) {
+	@Override public void setUsername(String username) {
 		this.username = username;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#getPassword()
-	 */
-	public String getPassword() {
+	@Override public String getSalt() {
+		return salt;
+	}
+
+	@Override public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	@Override public String getPassword() {
 		return password;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#setPassword(java.lang.String)
-	 */
-	public void setPassword(String password) {
+	@Override public void setPassword(String password) {
 		this.password = password;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#getFullname()
-	 */
-	public String getFullname() {
-		return fullname;
+	@Override public String getFullName() {
+		return fullName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#setFullname(java.lang.String)
-	 */
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	@Override public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#getEmail()
-	 */
-	public String getEmail() {
+	@Override public String getEmail() {
 		return email;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.ptsisi.daily.model.User#setEmail(java.lang.String)
-	 */
-	public void setEmail(String email) {
+	@Override public void setEmail(String email) {
 		this.email = email;
 	}
 
+	@Override public Blob getAvatar() {
+		return avatar;
+	}
+
+	@Override public void setAvatar(Blob avatar) {
+		this.avatar = avatar;
+	}
+
+	@Override public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override public Set<Role> getRoles() {
+		return roles;
+	}
+
+	@Override public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }

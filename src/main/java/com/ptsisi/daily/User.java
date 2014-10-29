@@ -1,46 +1,44 @@
 package com.ptsisi.daily;
 
+import com.ptsisi.common.Entity;
+import com.ptsisi.common.TimeEntity;
+
+import java.sql.Blob;
+import java.util.Set;
+
+/**
+ * Created by zhaoding on 14-10-29.
+ */
 public interface User extends Entity, TimeEntity {
+	String getUsername();
 
-  /**
-   * @return the username
-   */
-  public String getUsername();
+	void setUsername(String username);
 
-  /**
-   * @param username the username to set
-   */
-  public void setUsername(String username);
+	String getSalt();
 
-  /**
-   * @return the password
-   */
-  public String getPassword();
+	void setSalt(String salt);
 
-  /**
-   * @param password the password to set
-   */
-  public void setPassword(String password);
+	String getPassword();
 
-  /**
-   * @return the fullname
-   */
-  public String getFullname();
+	void setPassword(String password);
 
-  /**
-   * @param fullname the fullname to set
-   */
-  public void setFullname(String fullname);
+	String getFullName();
 
-  /**
-   * @return the email
-   */
-  public String getEmail();
+	void setFullName(String fullName);
 
-  /**
-   * @param email the email to set
-   */
-  public void setEmail(String email);
+	String getEmail();
 
+	void setEmail(String email);
 
+	Blob getAvatar();
+
+	void setAvatar(Blob avatar);
+
+	boolean isEnabled();
+
+	void setEnabled(boolean enabled);
+
+	Set<Role> getRoles();
+
+	void setRoles(Set<Role> roles);
 }

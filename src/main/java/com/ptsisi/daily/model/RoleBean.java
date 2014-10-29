@@ -1,29 +1,18 @@
 package com.ptsisi.daily.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.google.common.collect.Sets;
+import com.ptsisi.common.model.IntegerIdObject;
+import com.ptsisi.daily.Resource;
+import com.ptsisi.daily.User;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ptsisi.daily.Permission;
-import com.ptsisi.daily.Role;
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.model.base.IntegerIdTimeObject;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "org.ptsisi.daily.Role")
-@Table(name = "sys_roles")
-public class RoleBean extends IntegerIdTimeObject implements Role {
+@Table(name = "SYS_ROLES")
+public class RoleBean extends IntegerIdObject implements com.ptsisi.daily.Role {
 
 	private static final long serialVersionUID = 5227820401058873706L;
 
@@ -35,51 +24,46 @@ public class RoleBean extends IntegerIdTimeObject implements Role {
 	@NotBlank
 	@Length(max = 50)
 	private String description;
-	
-	private boolean enabled;
 
-	@OneToMany(targetEntity = UserBean.class, cascade = { CascadeType.ALL }, mappedBy = "role")
-	private Set<User> users = new HashSet<User>();
+	@ManyToMany(targetEntity = UserBean.class, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(name = "SYS_ROLES_USERS", joinColumns = { @JoinColumn(name = "ROLE_ID", updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "USER_ID", updatable = false) })
+	private Set<User> users = Sets.newHashSet();
 
-	@ManyToMany(targetEntity = PermissionBean.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "sys_roles_permissions", joinColumns = { @JoinColumn(name = "role_id", updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "permission_id", updatable = false) })
-	private Set<Permission> permissions = new HashSet<Permission>();
+	@ManyToMany(targetEntity = ResourceBean.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "SYS_ROLES_RESOURCES", joinColumns = { @JoinColumn(name = "ROLE_ID", updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "RESOURCE_ID", updatable = false) })
+	private Set<Resource> resources = Sets.newHashSet();
 
-	@Override
-	public String getName() {
+	@Override public String getName() {
 		return name;
 	}
 
-	@Override
-	public void setName(String name) {
+	@Override public void setName(String name) {
 		this.name = name;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return enabled;
+	@Override public String getDescription() {
+		return description;
 	}
 
-	@Override
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	@Override public void setDescription(String description) {
+		this.description = description;
 	}
 
-	@Override
-	public Set<User> getUsers() {
+	@Override public Set<User> getUsers() {
 		return users;
 	}
 
-	@Override
-	public void setUsers(Set<User> users) {
+	@Override public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
-	public Set<Permission> getPermissions() {
-		return permissions;
+	@Override public Set<Resource> getResources() {
+		return resources;
 	}
 
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
+	@Override public void setResources(Set<Resource> resources) {
+		this.resources = resources;
 	}
 }

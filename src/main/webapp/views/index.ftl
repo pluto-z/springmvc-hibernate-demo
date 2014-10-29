@@ -3,15 +3,15 @@
 <html>
 <head>
     <title>Daily</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport"
-          content="width=device-width,initial-scale=1.0,user-scalable=0" />
+          content="width=device-width,initial-scale=1.0,user-scalable=0"/>
     <link rel="stylesheet" type="text/css" href="static/plugins/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/plugins/bootstrap/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" type="text/css" href="static/plugins/validity/css/jquery.validity.css"/>
     <style>
         html {
-            background: url("static/images/background.jpg") no-repeat center center
-            fixed;
+            background: url("static/images/background.jpg") no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
@@ -44,47 +44,73 @@
             box-shadow: 0 0 15px #222;
         }
 
-        .incenter {
-            margin-top: 10%;
+        .login-container {
+            margin: 0 auto;
+            padding: 7% 0;
+            max-width: 400px;
+        }
+
+        .data-content {
+            margin: 0px 15px;
         }
     </style>
 </head>
 <body>
-<div class="container container-fluid incenter">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4 panel panel-default loginBox">
+<div class="data-content">
+    <div class="login-container">
+        <div class="panel panel-default loginBox">
             <h1 class="margin-base-vertical text-center">用户登陆</h1>
-            <form name="loginForm" method="post" action="login.action" class="margin-base-vertical">
-                <p class="input-group">
-						<span class="input-group-addon">
-							<span class="glyphicon glyphicon-user"></span>
-						</span>
-                    <input type="text" title="用户名" value="${username!?js_string}" name="username" placeholder="请输入邮箱" class="form-control input-lg"/>
-                </p>
-                <p class="input-group">
-						<span class="input-group-addon">
-							<span	class="glyphicon glyphicon-lock"></span>
-						</span>
-                    <input type="password" title="密码" name="password" class="form-control input-lg"/>
-                </p>
+
+            <form name="loginForm" method="post" action="login" class="margin-base-vertical">
+                <div class="panel-body">
+                [#if shiroLoginFailure?has_content]
+                    <div class="alert alert-danger fade in">
+                        <span class="glyphicon glyphicon-warning-sign"></span> ${shiroLoginFailure}
+                    </div>
+                [/#if]
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                            <input type="text" title="用户名" value="${username!?js_string}" name="username"
+                                   placeholder="请输入邮箱"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </span>
+                            <input type="password" title="密码" name="password" class="form-control input-lg"/>
+                        </div>
+                    </div>
                 [#if needCaptcha??]
-                	<p class="input-group">
-							<span class="input-group-addon">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
 								<span class="glyphicon glyphicon-align-justify"></span>
 							</span>
-                    	<input type="text" title="验证码" name="captcha" class="form-control input-lg" style="width:50%"/>
-                    	<img src="captcha.action" alt="显示图片" id="captcha" class="pull-right" style="width:45%;height: 46px;"/>
-                	</p>
+                            <input type="text" title="验证码" name="captcha" class="form-control input-lg"/>
+
+                            <div class="input-group-addon" style="padding:0">
+                                <img src="get-captcha" alt="验证码" id="captchaImg"/>
+                            </div>
+                        </div>
+                    </div>
                 [/#if]
-                <p class="text-center">
-                    <input type="checkbox" name="rememberMe" />下次自动登录
-                </p>
-                <p class="text-center btn-group-lg">
-                    <input type="submit" value="登录 " class="btn btn-success">
-                    <input type="button" value="注册 " class="btn btn-success">
-                </p>
+                    <div class="form-group text-right">
+                        <input type="checkbox" name="rememberMe"/>下次自动登录
+                    </div>
+                    <div class="form-group btn-group-lg text-center">
+                        <button type="submit" class="btn btn-success">登录</button>
+                        <button type="button" class="btn btn-danger">注册</button>
+                    </div>
+                </div>
             </form>
         </div>
+
     </div>
 </div>
 </body>
@@ -92,22 +118,16 @@
 <script type="text/javascript" src="static/plugins/validity/js/jquery.validity.js"></script>
 <script type="text/javascript" src="static/plugins/validity/lang/jquery.validity.lang.zh.js"></script>
 <script>
-    $(function(){
-    	[#if cmsg??]
-    		$.validity.outputs.tooltip.raise($("input[name='captcha']"),"${cmsg}");
-    	[/#if]
-    	[#if umsg??]
-    		$.validity.outputs.tooltip.raise($("input[name='username']"),"${umsg}");
-    	[/#if]
-        $("form[name='loginForm']").validity(function(){
+    $(function () {
+        $("form[name='loginForm']").validity(function () {
             $("input[name='username']").require().match('email').maxLength(32);
             $("input[name='password']").require().maxLength(16).minLength(6);
-         	[#if needCaptcha??]
-         	$("input[name='captcha']").require();
-         	[/#if]
+        [#if needCaptcha??]
+            $("input[name='captcha']").require();
+        [/#if]
         });
-        $("#captcha").click(function(){
-           this.src = this.src+"?d=" + new Date().getTime();
+        $("#captchaImg").click(function () {
+            $(this).attr("src", "get-captcha?date = " + new Date() + Math.floor(Math.random() * 24));
         });
     })
 </script>

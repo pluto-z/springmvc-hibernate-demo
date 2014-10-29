@@ -1,17 +1,13 @@
 package com.ptsisi.security;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.web.service.UserService;
+import com.ptsisi.security.utils.PasswordUtil;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.service.UserService;
 
 /**
  * Created by zhaoding on 14-10-27.
@@ -30,10 +26,15 @@ public class DefaultRealm extends AuthorizingRealm {
 		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
 		User user = userService.getUserByAccount(usernamePasswordToken.getUsername());
 		if (user != null) {
-			return new SimpleAuthenticationInfo(user.getUsername(), user
-					.getPassword(), user.getFullname());
+			if (!user.isEnabled()) {
+				throw new DisabledAccountException(user.getUsername() + " has been disabled");
+			}
+			SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(),
+					getName());
+			info.setCredentialsSalt(PasswordUtil.getSimpleHash(user).getSalt());
+			return info;
 		} else {
-			return null;
+			throw new AccountNotFoundException("username [" + usernamePasswordToken.getUsername() + "] doesn't exist]");
 		}
 	}
 }

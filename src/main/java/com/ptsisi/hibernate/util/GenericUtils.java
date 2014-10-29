@@ -9,7 +9,7 @@ public class GenericUtils {
 
 	@SuppressWarnings("rawtypes")
 	public static Class getSuperClassGenericType(Class<?> clazz) {
-		return ((ParameterizedType) clazz.getGenericSuperclass())
-				.getActualTypeArguments()[0].getClass();
+		return (Class) ((ParameterizedType) clazz.getGenericSuperclass())
+				.getActualTypeArguments()[0];
 	}
 }

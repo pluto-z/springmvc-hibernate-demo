@@ -1,4 +1,5 @@
 [#ftl]
+[#assign base= rc.contextPath/]
 [#macro head title="Daily"]
 [#local request = fetchRequest()/]
 [#if !(request.getHeader('x-requested-with')??)]
@@ -14,7 +15,6 @@
     <meta http-equiv="expires" content="0"/>
     <meta http-equiv="content-style-type" content="text/css"/>
     <meta http-equiv="content-script-type" content="text/javascript"/>
-    [#local base= springMacroRequestContext.getContextPath()/]
     [#local min][#if request.getParameter("debug")??][#else].min[/#if][/#local]
     <link rel="stylesheet" type="text/css" href="${base}/static/plugins/bootstrap/css/bootstrap${min}.css">
     <script type="text/javascript" src="${base}/static/plugins/jquery/jquery-1.11.1${min}.js"></script>
@@ -30,7 +30,6 @@
 [/#macro]
 
 [#macro script src]
-    [#local base= springMacroRequestContext.getContextPath()/]
     [#local lsrc = base+src]
     [#if request.getParameter("debug")?? && lsrc?contains('.min')]
         [#local lsrc = lsrc?replace('.min','')/]
