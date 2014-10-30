@@ -57,8 +57,8 @@
 </head>
 <body>
 <div class="data-content">
-    <div class="login-container">
-        <div class="panel panel-default loginBox">
+    <div class="login-container tab-content">
+        <div id="loginbox" class="panel panel-default loginBox tab-pane fade ${registerFail???string('','in active')}">
             <h1 class="margin-base-vertical text-center">用户登陆</h1>
 
             <form name="loginForm" method="post" action="login" class="margin-base-vertical">
@@ -68,13 +68,19 @@
                         <span class="glyphicon glyphicon-warning-sign"></span> ${shiroLoginFailure}
                     </div>
                 [/#if]
+                [#if registerSuccess?has_content]
+                    <div class="alert alert-success fade in">
+                        <span class="glyphicon glyphicon-ok-sign"></span> ${registerSuccess}
+                    </div>
+                [/#if]
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-user"></span>
                             </span>
-                            <input type="text" title="用户名" value="${username!?js_string}" name="username"
-                                   placeholder="请输入邮箱"
+                            <input id="login_username" type="text" title="用户名" value="${username!?js_string}"
+                                   name="username"
+                                   placeholder="邮箱"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -83,7 +89,9 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-lock"></span>
                             </span>
-                            <input type="password" title="密码" name="password" class="form-control input-lg"/>
+                            <input id="login_password" type="password" title="密码" name="password"
+                                   placeholder="密码"
+                                   class="form-control input-lg"/>
                         </div>
                     </div>
                 [#if needCaptcha??]
@@ -92,7 +100,9 @@
                             <span class="input-group-addon">
 								<span class="glyphicon glyphicon-align-justify"></span>
 							</span>
-                            <input type="text" title="验证码" name="captcha" class="form-control input-lg"/>
+                            <input id="login_captcha" type="text" title="验证码" name="captcha"
+                                   placeholder="验证码"
+                                   class="form-control input-lg"/>
 
                             <div class="input-group-addon" style="padding:0">
                                 <img src="get-captcha" alt="验证码" id="captchaImg"/>
@@ -105,12 +115,84 @@
                     </div>
                     <div class="form-group btn-group-lg text-center">
                         <button type="submit" class="btn btn-success">登录</button>
-                        <button type="button" class="btn btn-danger">注册</button>
+                        <button type="button" class="btn btn-info" id="registerBtn">注册</button>
                     </div>
                 </div>
             </form>
         </div>
+        <div id="registerbox" class="panel panel-default loginBox tab-pane fade ${registerFail???string('in active','')}">
+            <h1 class="margin-base-vertical text-center">注册新用户</h1>
 
+            <form name="registerForm" method="post" action="register" class="margin-base-vertical">
+                <div class="panel-body">
+                [#if registerFail?has_content]
+                    <div class="alert alert-danger fade in">
+                        <span class="glyphicon glyphicon-warning-sign"></span> ${registerFail}
+                    </div>
+                [/#if]
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                            <input id="register_fullname" type="text" title="姓名" value="${fullName!?js_string}"
+                                   name="fullName"
+                                   placeholder="姓名"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                            <input id="register_username" type="text" title="用户名" value="${username!?js_string}"
+                                   name="username"
+                                   placeholder="邮箱"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </span>
+                            <input id="register_password" type="password" title="密码" name="password"
+                                   placeholder="密码"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-repeat"></span>
+                            </span>
+                            <input id="register_password2" type="password" title="重复密码" name="password2"
+                                   placeholder="重复密码"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+								<span class="glyphicon glyphicon-align-justify"></span>
+							</span>
+                            <input id="register_captcha" type="text" title="验证码" name="captcha"
+                                   placeholder="验证码"
+                                   class="form-control input-lg"/>
+
+                            <div class="input-group-addon" style="padding:0">
+                                <img src="get-captcha" alt="验证码" id="captchaImg_r"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group btn-group-lg text-center">
+                        <button type="submit" class="btn btn-success">提交</button>
+                        <button type="button" class="btn btn-info" id="loginBtn">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
@@ -120,14 +202,44 @@
 <script>
     $(function () {
         $("form[name='loginForm']").validity(function () {
-            $("input[name='username']").require().match('email').maxLength(32);
-            $("input[name='password']").require().maxLength(16).minLength(6);
+            $("#login_username").require().match('email').maxLength(32);
+            $("#login_password").require().maxLength(10).minLength(6);
         [#if needCaptcha??]
-            $("input[name='captcha']").require();
+            $("#login_captcha").require();
         [/#if]
+        });
+        $("form[name='registerForm']").validity(function () {
+            $("#register_fullname").require().maxLength(50);
+            $("#register_username").require().match('email').maxLength(32);
+            $("#register_password").require().maxLength(10).minLength(6);
+            $("#register_password2").require().maxLength(10).minLength(6).assert(function () {
+                return  $("#register_password").val() == $("#register_password2").val();
+            }, "两次输入不一致");
+            $("#register_captcha").require();
         });
         $("#captchaImg").click(function () {
             $(this).attr("src", "get-captcha?date = " + new Date() + Math.floor(Math.random() * 24));
+        });
+        $("#captchaImg_r").click(function () {
+            $(this).attr("src", "get-captcha?date = " + new Date() + Math.floor(Math.random() * 24));
+        });
+        $("#registerBtn").click(function () {
+            var loginbox = $("#loginbox");
+            var registerbox = $("#registerbox");
+            setTimeout(function () {
+                loginbox.removeClass("active");
+                registerbox.addClass('in').addClass("active");
+            }, 150);
+            loginbox.removeClass('in');
+        });
+        $("#loginBtn").click(function () {
+            var loginbox = $("#loginbox");
+            var registerbox = $("#registerbox");
+            setTimeout(function () {
+                registerbox.removeClass("active");
+                loginbox.addClass('in').addClass("active");
+            }, 150);
+            registerbox.removeClass('in');
         });
     })
 </script>

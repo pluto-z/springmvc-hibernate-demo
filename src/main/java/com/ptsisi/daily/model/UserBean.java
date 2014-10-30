@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Blob;
 import java.util.Set;
 
-@Entity(name = "org.ptsisi.keyword.User")
+@Entity(name = "com.ptsisi.daily.User")
 @Table(name = "SYS_USERS")
 public class UserBean extends IntegerIdTimeObject implements User {
 
@@ -40,7 +40,7 @@ public class UserBean extends IntegerIdTimeObject implements User {
 	@Lob
 	private Blob avatar;
 
-	private boolean enabled;
+	private boolean enabled = true;
 
 	@ManyToMany(targetEntity = RoleBean.class, mappedBy = "users", fetch = FetchType.LAZY)
 	private Set<Role> roles = Sets.newHashSet();

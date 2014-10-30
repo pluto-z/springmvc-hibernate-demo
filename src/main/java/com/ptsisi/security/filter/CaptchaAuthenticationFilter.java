@@ -5,7 +5,10 @@ import com.ptsisi.security.CaptchaNotMatchException;
 import com.ptsisi.security.utils.CaptchaProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -58,9 +61,9 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
 			request.setAttribute(getFailureKeyAttribute(), "密码错误");
 		} else if (ae instanceof DisabledAccountException) {
 			request.setAttribute(getFailureKeyAttribute(), "你的账户已被禁用");
-		} else if(ae instanceof AccountNotFoundException){
+		} else if (ae instanceof AccountNotFoundException) {
 			request.setAttribute(getFailureKeyAttribute(), "用户名不存在");
-		}else {
+		} else {
 			request.setAttribute(getFailureKeyAttribute(), "服务器出现异常");
 		}
 	}
@@ -78,6 +81,7 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
 		if (number >= this.allowIncorrectNumber) {
 			session.setAttribute(NEED_CAPATCHA, true);
 		}
+		request.setAttribute("username", token.getPrincipal());
 		return super.onLoginFailure(token, e, request, response);
 	}
 

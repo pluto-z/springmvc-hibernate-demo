@@ -1,16 +1,22 @@
 package com.ptsisi.daily.web.service.impl;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import com.ptsisi.daily.Role;
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.model.RoleBean;
+import com.ptsisi.daily.web.service.UserService;
+import com.ptsisi.hibernate.EntityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.web.dao.UserManager;
-import com.ptsisi.daily.web.service.UserService;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhaoding on 14-10-27.
@@ -19,35 +25,57 @@ import com.ptsisi.daily.web.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	protected UserManager userManager;
+	protected EntityDao entityDao;
 
 	@Cacheable(value = "app")
 	public User getUser(Integer id) {
-		return userManager.get(id);
+		return entityDao.get(User.class, id);
 	}
 
 	@Cacheable(value = "app")
 	public User getUserByAccount(String username) {
-		return userManager.findUniqueBy("username", username);
+		return entityDao.findUniqueBy(User.class, "username", username);
 	}
 
 	@Cacheable(value = "app")
 	public List<User> getUsers() {
-		return userManager.getAll();
+		return entityDao.getAll(User.class);
+	}
+
+	@CachePut(value = "app")
+	public void saveOrUpdate(User user, File avatar) {
+		if (avatar != null && avatar.exists()) {
+			try {
+				user.setAvatar(entityDao.createBlob(new FileInputStream(avatar)));
+			} catch (FileNotFoundException e) {
+			}
+		}
+		saveOrUpdate(user);
 	}
 
 	@CachePut(value = "app")
 	public void saveOrUpdate(User user) {
-		userManager.saveOrUpdate(user);
+		List<Object> toSave = Lists.newArrayList();
+		Date date = new Date();
+		if (user.isTransient()) {
+			Role role = entityDao.get(RoleBean.class, Role.USER);
+			role.getUsers().add(user);
+			user.setCreatedAt(date);
+			toSave.add(role);
+		}
+		user.setEmail(user.getUsername());
+		user.setUpdatedAt(date);
+		toSave.add(user);
+		entityDao.saveOrUpdate(toSave);
 	}
 
 	@CacheEvict(value = "app")
 	public void remove(User user) {
-		userManager.remove(user);
+		entityDao.remove(user);
 	}
 
 	@CacheEvict(value = "app")
 	public void remove(List<User> users) {
-		userManager.remove(users);
+		entityDao.remove(users);
 	}
 }

@@ -38,7 +38,7 @@ public class PasswordUtil {
 
 	public static void main(String[] args) {
 		User user = new UserBean();
-		user.setUsername("admin@pt.sisi");
+		user.setUsername("pluto4321@163.com");
 		user.setPassword("zhaoding");
 		populateEncryptInfo(user);
 		System.out.println(user.getSalt());

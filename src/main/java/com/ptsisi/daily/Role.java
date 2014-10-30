@@ -9,6 +9,9 @@ import java.util.Set;
  */
 public interface Role extends Entity {
 
+	public static final Integer ADMIN = 1;
+	public static final Integer USER = 2;
+
 	String getName();
 
 	void setName(String name);

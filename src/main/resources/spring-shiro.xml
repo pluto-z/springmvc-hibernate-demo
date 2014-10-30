@@ -32,11 +32,11 @@
     </bean>
 
     <!--默认cookie记录一年，所以用配置更改为30天-->
-    <bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie" p:maxAge="2592000">
+    <bean id="rememberCookie" class="org.apache.shiro.web.servlet.SimpleCookie" p:maxAge="2592000" p:httpOnly="true">
         <constructor-arg name="name" value="daily-remember-cookie"/>
     </bean>
     <bean id="cookieRememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager"
-          p:cookie-ref="simpleCookie"/>
+          p:cookie-ref="rememberCookie"/>
     <!-- 使用默认的WebSecurityManager -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager"
           p:realm-ref="defaultRealm" p:cacheManager-ref="cacheManager" p:sessionManager-ref="sessionManager"
@@ -46,13 +46,12 @@
         <!-- 默认的连接配置 -->
         <property name="filterChainDefinitions">
             <value>
-                /=anon
-                /index=anon
                 /login=captchaAuthc
+                /register=anon
                 /get-captcha=anon
                 /static/**=anon
                 /logout=logout
-                /**=authc
+                /**=user
             </value>
         </property>
     </bean>

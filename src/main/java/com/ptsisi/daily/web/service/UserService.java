@@ -1,8 +1,9 @@
 package com.ptsisi.daily.web.service;
 
-import java.util.List;
-
 import com.ptsisi.daily.User;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by zhaoding on 14-10-27.
@@ -14,6 +15,8 @@ public interface UserService {
 	User getUserByAccount(String username);
 
 	List<User> getUsers();
+
+	void saveOrUpdate(User user, File avatar);
 
 	void saveOrUpdate(User user);
 
