@@ -1,11 +1,12 @@
 package com.ptsisi.common.model;
 
-import com.ptsisi.common.TimeEntity;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import com.ptsisi.common.TimeEntity;
 
 @MappedSuperclass
 public abstract class IntegerIdTimeObject extends IntegerIdObject implements TimeEntity {

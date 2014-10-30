@@ -1,14 +1,23 @@
 package com.ptsisi.daily.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.google.common.collect.Sets;
 import com.ptsisi.common.model.IntegerIdObject;
 import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.User;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.persistence.*;
-import java.util.Set;
 
 @Entity(name = "org.ptsisi.daily.Role")
 @Table(name = "SYS_ROLES")

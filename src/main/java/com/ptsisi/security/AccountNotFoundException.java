@@ -7,6 +7,8 @@ import org.apache.shiro.authc.AuthenticationException;
  */
 public class AccountNotFoundException extends AuthenticationException {
 
+	private static final long serialVersionUID = -3179257566150215502L;
+
 	public AccountNotFoundException() {
 		super();
 	}

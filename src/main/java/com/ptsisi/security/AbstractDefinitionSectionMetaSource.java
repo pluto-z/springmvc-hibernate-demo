@@ -1,19 +1,13 @@
 package com.ptsisi.security;
 
+import java.util.Map;
+
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.config.Ini.Section;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.web.config.IniFilterChainResolverFactory;
-import org.apache.shiro.web.servlet.AbstractShiroFilter;
-import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.DependsOn;
-
-import java.util.Map;
 
 /**
  * 借助spring {@link org.springframework.beans.factory.FactoryBean} 对apache shiro的premission进行动态创建

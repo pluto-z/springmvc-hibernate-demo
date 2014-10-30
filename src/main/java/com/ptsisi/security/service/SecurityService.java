@@ -1,8 +1,8 @@
 package com.ptsisi.security.service;
 
-import com.ptsisi.daily.Resource;
-
 import java.util.List;
+
+import com.ptsisi.daily.Resource;
 
 /**
  * Created by zhaoding on 14-10-28.

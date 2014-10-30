@@ -1,8 +1,8 @@
 package com.ptsisi.daily;
 
-import com.ptsisi.common.Entity;
-
 import java.util.Set;
+
+import com.ptsisi.common.Entity;
 
 /**
  * Created by zhaoding on 14-10-28.

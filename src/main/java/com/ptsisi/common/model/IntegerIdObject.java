@@ -5,9 +5,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
-import com.ptsisi.common.Entity;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ptsisi.common.Entity;
 import com.ptsisi.common.predicate.ValidEntityKeyPredicate;
 
 @MappedSuperclass

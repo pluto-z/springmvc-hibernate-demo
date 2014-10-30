@@ -1,15 +1,15 @@
 package com.ptsisi.security.utils;
 
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.model.UserBean;
-import com.ptsisi.security.DefaultRealm;
-
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.model.UserBean;
+import com.ptsisi.security.DefaultRealm;
 
 /**
  * Created by zhaoding on 14-10-29.

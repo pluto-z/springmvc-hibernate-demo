@@ -1,12 +1,29 @@
 package com.ptsisi.hibernate.dao;
 
-import com.ptsisi.hibernate.HibernateDaoHandler;
-import com.ptsisi.hibernate.SinglePage;
-import org.hibernate.*;
-import org.hibernate.criterion.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.jdbc.StreamUtils;
 import org.hibernate.internal.CriteriaImpl;
-import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +31,16 @@ import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.ptsisi.common.model.IntegerIdTimeObject;
+import com.ptsisi.hibernate.HibernateDaoHandler;
+import com.ptsisi.hibernate.SinglePage;
 
 /**
  * Created by zhaoding on 14-10-23.
  */
 @Repository
-public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibernate.EntityDao {
+public class HibernateDaoSupport implements HibernateDaoHandler,
+		com.ptsisi.hibernate.EntityDao {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -39,11 +52,14 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 		return sessionFactory.getCurrentSession();
 	}
 
-	@Override public Object execute(HibernateCallback action) {
+	@Override
+	public <T> T execute(HibernateCallback<T> action) {
 		return action.doInHibernate(getSession());
 	}
 
-	@Override public <T> List<T> getAll(final Class<T> entityClass) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public <T> List<T> getAll(final Class<T> entityClass) {
 		return (List<T>) execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) {
 				Criteria criteria = session.createCriteria(entityClass);
@@ -54,14 +70,18 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 获取全部对象，带排序功能
-	 *
+	 * 
 	 * @param <T>
-	 * @param entityClass 实体对象
-	 * @param orderBy     　排序字段
-	 * @param isAsc       升序或降序
+	 * @param entityClass
+	 *            实体对象
+	 * @param orderBy
+	 *            　排序字段
+	 * @param isAsc
+	 *            升序或降序
 	 * @return
 	 */
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> List<T> getAll(final Class<T> entityClass, final String orderBy,
 			final boolean isAsc) {
 		Assert.hasText(orderBy);
@@ -80,24 +100,38 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 保存对象
-	 *
+	 * 
 	 * @param entity
 	 */
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public <T> void saveOrUpdate(final T entity) {
-		execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
+		execute(new HibernateCallback<T>() {
+			public T doInHibernate(Session session) {
+				if (entity instanceof IntegerIdTimeObject) {
+					Date date = new Date();
+					if (((IntegerIdTimeObject) entity).isTransient()) {
+						((IntegerIdTimeObject) entity).setCreatedAt(date);
+					}
+					((IntegerIdTimeObject) entity).setUpdatedAt(date);
+				}
 				session.saveOrUpdate(entity);
 				return null;
 			}
 		});
 	}
 
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public <T> void saveOrUpdate(final List<T> entities) {
-		execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
+		execute(new HibernateCallback<T>() {
+			public T doInHibernate(Session session) {
 				for (T entity : entities) {
+					if (entity instanceof IntegerIdTimeObject) {
+						Date date = new Date();
+						if (((IntegerIdTimeObject) entity).isTransient()) {
+							((IntegerIdTimeObject) entity).setCreatedAt(date);
+						}
+						((IntegerIdTimeObject) entity).setUpdatedAt(date);
+					}
 					session.saveOrUpdate(entity);
 				}
 				return null;
@@ -105,29 +139,29 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 		});
 	}
 
-
-	@Override public void evict(final Object entity) {
+	@Override
+	public void evict(final Object entity) {
 		getSession().evict(entity);
 	}
 
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Blob createBlob(final InputStream inputStream, final int length) {
-		return (Blob) execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
+		return (Blob) execute(new HibernateCallback<Blob>() {
+			public Blob doInHibernate(Session session) {
 				return Hibernate.getLobCreator(session).createBlob(inputStream,
 						length);
 			}
 		});
 	}
 
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Blob createBlob(InputStream inputStream) {
 		try {
 			final ByteArrayOutputStream buffer = new ByteArrayOutputStream(
 					inputStream.available());
 			StreamUtils.copy(inputStream, buffer);
-			return (Blob) execute(new HibernateCallback() {
-				public Object doInHibernate(Session session) {
+			return (Blob) execute(new HibernateCallback<Blob>() {
+				public Blob doInHibernate(Session session) {
 					return Hibernate.getLobCreator(session).createBlob(
 							buffer.toByteArray());
 				}
@@ -137,28 +171,40 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 		}
 	}
 
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Clob createClob(final String str) {
-		return (Clob) execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
+		return (Clob) execute(new HibernateCallback<Clob>() {
+			public Clob doInHibernate(Session session) {
 				return Hibernate.getLobCreator(session).createClob(str);
 			}
 		});
 	}
 
-	@Override public void refresh(Object entity) {
+	@Override
+	public void refresh(Object entity) {
 		getSession().refresh(entity);
+	}
+
+	public <T> void remove(final Collection<T> entities) {
+		execute(new HibernateCallback<Collection<T>>() {
+			public Collection<T> doInHibernate(Session session) {
+				for (T entity : entities) {
+					session.delete(entity);
+				}
+				return null;
+			}
+		});
 	}
 
 	/**
 	 * 删除对象
-	 *
+	 * 
 	 * @param entity
 	 */
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public <T> void remove(final T entity) {
-		execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
+		execute(new HibernateCallback<T>() {
+			public T doInHibernate(Session session) {
 				session.delete(entity);
 				return null;
 			}
@@ -170,26 +216,29 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 	 * @param entityClass
 	 * @param id
 	 */
-	@Override public <T> void remove(Class<T> entityClass, Serializable id) {
+	@Override
+	public <T> void remove(Class<T> entityClass, Serializable id) {
 		remove(get(entityClass, id));
 	}
 
 	/**
 	 * 根据Id获取对象。
-	 *
+	 * 
 	 * @param <T>
 	 * @param entityClass
-	 * @param id          实体Id
+	 * @param id
+	 *            实体Id
 	 * @return 实体对象
 	 */
-	@Override @SuppressWarnings({ "hiding", "unchecked", "rawtypes" })
+	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T get(final Class<T> entityClass, final Serializable id) {
 		if (entityClass.isInterface()) {
 			throw new RuntimeException("interface is not support here");
 		} else {
-			return (T) execute(new HibernateCallback() {
-				public Object doInHibernate(Session session) {
-					return session.get(entityClass, id);
+			return (T) execute(new HibernateCallback<T>() {
+				public T doInHibernate(Session session) {
+					return (T) session.get(entityClass, id);
 				}
 			});
 		}
@@ -197,12 +246,13 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 创建一个Query对象。
-	 *
+	 * 
 	 * @param hql
 	 * @param values
 	 * @return
 	 */
-	@Override public Query createQuery(String hql, Object... values) {
+	@Override
+	public Query createQuery(String hql, Object... values) {
 		Assert.hasText(hql);
 		Query query = getSession().createQuery(hql);
 		for (int i = 0; i < values.length; i++) {
@@ -213,13 +263,14 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 创建Criteria对象。
-	 *
+	 * 
 	 * @param <T>
 	 * @param entityClass
 	 * @param criterions
 	 * @return
 	 */
-	@Override public <T> Criteria createCriteria(Class<T> entityClass,
+	@Override
+	public <T> Criteria createCriteria(Class<T> entityClass,
 			Criterion... criterions) {
 		Criteria criteria = getSession().createCriteria(entityClass);
 		for (Criterion c : criterions) {
@@ -230,7 +281,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 创建Criteria对象，有排序功能。
-	 *
+	 * 
 	 * @param <T>
 	 * @param entityClass
 	 * @param orderBy
@@ -238,7 +289,8 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 	 * @param criterions
 	 * @return
 	 */
-	@Override public <T> Criteria createCriteria(Class<T> entityClass, String orderBy,
+	@Override
+	public <T> Criteria createCriteria(Class<T> entityClass, String orderBy,
 			boolean isAsc, Criterion... criterions) {
 		Assert.hasText(orderBy);
 		final Class<?> clazz;
@@ -258,24 +310,26 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 根据hql查询
-	 *
+	 * 
 	 * @param hql
 	 * @param values
 	 * @return
 	 */
 
-	@Override @SuppressWarnings("rawtypes")
-	public <T> List find(final String hql, final Object... values) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<?> find(final String hql, final Object... values) {
 		Assert.hasText(hql);
 		return createQuery(hql, values).list();
 	}
 
 	/**
 	 * 根据属性名和属性值查询.
-	 *
+	 * 
 	 * @return
 	 */
-	@Override @SuppressWarnings({ "unchecked" })
+	@Override
+	@SuppressWarnings("unchecked")
 	public <T> List<T> findBy(Class<T> entityClass, String propertyName,
 			Object value) {
 		Assert.hasText(propertyName);
@@ -285,7 +339,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 根据属性名和属性值查询. 有排序
-	 *
+	 * 
 	 * @param <T>
 	 * @param entityClass
 	 * @param propertyName
@@ -294,7 +348,8 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 	 * @param isAsc
 	 * @return
 	 */
-	@Override @SuppressWarnings({ "unchecked" })
+	@Override
+	@SuppressWarnings({ "unchecked" })
 	public <T> List<T> findBy(Class<T> entityClass, String propertyName,
 			Object value, String orderBy, boolean isAsc) {
 		Assert.hasText(propertyName);
@@ -305,10 +360,11 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 根据属性名和属性值 查询 且要求对象唯一.
-	 *
+	 * 
 	 * @return 符合条件的唯一对象.
 	 */
-	@Override @SuppressWarnings({ "unchecked" })
+	@Override
+	@SuppressWarnings({ "unchecked" })
 	public <T> T findUniqueBy(Class<T> entityClass, String propertyName,
 			Object value) {
 		Assert.hasText(propertyName);
@@ -318,14 +374,15 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 分页 通过hql进行
-	 *
+	 * 
 	 * @param hql
 	 * @param pageNo
 	 * @param pageSize
 	 * @param values
 	 * @return
 	 */
-	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> SinglePage<T> pagedQuery(String hql, int pageNo, int pageSize,
 			Object... values) {
 		Assert.hasText(hql);
@@ -345,14 +402,16 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 分页 通过criteria
-	 *
+	 * 
 	 * @param criteria
 	 * @param pageNo
 	 * @param pageSize
 	 * @return
 	 */
-	@Override @SuppressWarnings({ "unchecked" })
-	public <T> SinglePage<T> pagedQuery(Criteria criteria, int pageNo, int pageSize) {
+	@Override
+	@SuppressWarnings({ "unchecked" })
+	public <T> SinglePage<T> pagedQuery(Criteria criteria, int pageNo,
+			int pageSize) {
 		Assert.notNull(criteria);
 		Assert.isTrue(pageNo >= 1);
 		CriteriaImpl criteriaImpl = (CriteriaImpl) criteria;
@@ -376,14 +435,15 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 分页查询函数
-	 *
+	 * 
 	 * @param entityClass
 	 * @param pageNo
 	 * @param pageSize
 	 * @param criterions
 	 * @return
 	 */
-	@Override public <T> SinglePage<T> pagedQuery(Class<T> entityClass, int pageNo,
+	@Override
+	public <T> SinglePage<T> pagedQuery(Class<T> entityClass, int pageNo,
 			int pageSize, Criterion... criterions) {
 		Criteria criteria = createCriteria(entityClass, criterions);
 		return pagedQuery(criteria, pageNo, pageSize);
@@ -391,7 +451,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 分页查询带排序
-	 *
+	 * 
 	 * @param entityClass
 	 * @param pageNo
 	 * @param pageSize
@@ -400,7 +460,8 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 	 * @param criterions
 	 * @return
 	 */
-	@Override public <T> SinglePage<T> pagedQuery(Class<T> entityClass, int pageNo,
+	@Override
+	public <T> SinglePage<T> pagedQuery(Class<T> entityClass, int pageNo,
 			int pageSize, String orderBy, boolean isAsc,
 			Criterion... criterions) {
 		Criteria criteria = createCriteria(entityClass, orderBy, isAsc,
@@ -410,7 +471,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 去除hql的select子句。
-	 *
+	 * 
 	 * @param hql
 	 * @return
 	 * @see #pagedQuery(String, int, int, Object[])
@@ -424,7 +485,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler, com.ptsisi.hibe
 
 	/**
 	 * 去除hql的orderBy子句。
-	 *
+	 * 
 	 * @param hql
 	 * @return
 	 * @see #pagedQuery(String, int, int, Object[])

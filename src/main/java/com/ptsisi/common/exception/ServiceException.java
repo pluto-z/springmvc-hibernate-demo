@@ -2,6 +2,8 @@ package com.ptsisi.common.exception;
 
 public class ServiceException extends RuntimeException {
 
+	private static final long serialVersionUID = -1581267521101113457L;
+
 	public ServiceException() {
 		super();
 	}

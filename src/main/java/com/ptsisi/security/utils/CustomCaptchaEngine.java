@@ -1,5 +1,9 @@
 package com.ptsisi.security.utils;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.image.ImageFilter;
+
 import com.octo.captcha.component.image.backgroundgenerator.BackgroundGenerator;
 import com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator;
 import com.octo.captcha.component.image.color.RandomListColorGenerator;
@@ -17,9 +21,6 @@ import com.octo.captcha.component.word.wordgenerator.ComposeDictionaryWordGenera
 import com.octo.captcha.component.word.wordgenerator.WordGenerator;
 import com.octo.captcha.engine.image.ListImageCaptchaEngine;
 import com.octo.captcha.image.gimpy.GimpyFactory;
-
-import java.awt.*;
-import java.awt.image.ImageFilter;
 
 public class CustomCaptchaEngine extends ListImageCaptchaEngine {
 

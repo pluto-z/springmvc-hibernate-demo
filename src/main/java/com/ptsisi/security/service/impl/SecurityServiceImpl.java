@@ -1,11 +1,12 @@
 package com.ptsisi.security.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.google.common.collect.Lists;
 import com.ptsisi.daily.Resource;
 import com.ptsisi.security.service.SecurityService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created by zhaoding on 14-10-28.

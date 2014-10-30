@@ -1,11 +1,12 @@
 package com.ptsisi.daily.model;
 
-import com.ptsisi.common.model.IntegerIdObject;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.ptsisi.common.model.IntegerIdObject;
 
 @Entity(name = "com.ptsisi.daily.Resource")
 @Table(name = "SYS_RESOURCES")

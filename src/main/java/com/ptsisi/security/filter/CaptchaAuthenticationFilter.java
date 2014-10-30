@@ -1,8 +1,9 @@
 package com.ptsisi.security.filter;
 
-import com.ptsisi.security.AccountNotFoundException;
-import com.ptsisi.security.CaptchaNotMatchException;
-import com.ptsisi.security.utils.CaptchaProvider;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -15,9 +16,9 @@ import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import com.ptsisi.security.AccountNotFoundException;
+import com.ptsisi.security.CaptchaNotMatchException;
+import com.ptsisi.security.utils.CaptchaProvider;
 
 /**
  * Created by zhaoding on 14-10-28.

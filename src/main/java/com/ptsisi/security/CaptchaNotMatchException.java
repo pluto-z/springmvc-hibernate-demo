@@ -4,6 +4,8 @@ import org.apache.shiro.authc.AuthenticationException;
 
 public class CaptchaNotMatchException extends AuthenticationException {
 
+	private static final long serialVersionUID = -4723801407555012364L;
+
 	public CaptchaNotMatchException() {
 		super();
 	}

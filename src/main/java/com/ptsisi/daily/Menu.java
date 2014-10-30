@@ -1,10 +1,10 @@
 package com.ptsisi.daily;
 
+import java.util.List;
+
 import com.ptsisi.common.Entity;
 import com.ptsisi.common.TimeEntity;
 import com.ptsisi.daily.model.MenuBean;
-
-import java.util.List;
 
 /**
  * Created by zhaoding on 14-10-28.
