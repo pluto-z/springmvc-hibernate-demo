@@ -15,7 +15,9 @@ import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.Role;
 import com.ptsisi.daily.User;
 import com.ptsisi.daily.web.service.MenuService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MenuServiceImpl extends BaseServiceImpl implements MenuService {
 
 	@SuppressWarnings("unchecked")

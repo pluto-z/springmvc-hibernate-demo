@@ -1,25 +1,16 @@
 package com.ptsisi.daily.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.google.common.collect.Sets;
 import com.ptsisi.common.model.IntegerIdObject;
 import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.User;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
-@Entity(name = "org.ptsisi.daily.Role")
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity(name = "com.ptsisi.daily.Role")
 @Table(name = "SYS_ROLES")
 public class RoleBean extends IntegerIdObject implements com.ptsisi.daily.Role {
 
@@ -34,12 +25,10 @@ public class RoleBean extends IntegerIdObject implements com.ptsisi.daily.Role {
 	@Length(max = 50)
 	private String description;
 
-	@ManyToMany(targetEntity = UserBean.class, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "SYS_ROLES_USERS", joinColumns = { @JoinColumn(name = "ROLE_ID", updatable = false) },
-			inverseJoinColumns = { @JoinColumn(name = "USER_ID", updatable = false) })
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
 	private Set<User> users = Sets.newHashSet();
 
-	@ManyToMany(targetEntity = ResourceBean.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "SYS_ROLES_RESOURCES", joinColumns = { @JoinColumn(name = "ROLE_ID", updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "RESOURCE_ID", updatable = false) })
 	private Set<Resource> resources = Sets.newHashSet();

@@ -1,37 +1,31 @@
 package com.ptsisi.daily;
 
-import java.util.List;
-
-import com.ptsisi.common.Entity;
-import com.ptsisi.common.TimeEntity;
 import com.ptsisi.daily.model.MenuBean;
 
+import java.util.Set;
+
 /**
- * Created by zhaoding on 14-10-28.
+ * Created by zhaoding on 14-10-31.
  */
-public interface Menu extends Entity, TimeEntity {
+public interface Menu extends Comparable<Menu>, com.ptsisi.common.HierarchyEntity<Menu> {
 
 	String getName();
 
 	void setName(String name);
 
-	int getIndexNo();
+	String getEntry();
 
-	void setIndexNo(int indexNo);
+	void setEntry(String entry);
 
-	MenuBean getParent();
+	Set<Resource> getResources();
 
-	void setParent(MenuBean parent);
-
-	List<MenuBean> getChildren();
-
-	void setChildren(List<MenuBean> children);
-
-	Resource getResource();
-
-	void setResource(Resource resource);
+	void setResources(Set<Resource> resources);
 
 	boolean isEnabled();
 
 	void setEnabled(boolean enabled);
+
+	String getIcon();
+
+	void setIcon(String icon);
 }

@@ -15,7 +15,7 @@ public interface Resource extends Entity {
 
 	void setPermission(String permission);
 
-	String getEntry();
+	String getValue();
 
-	void setEntry(String entry);
+	void setValue(String value);
 }

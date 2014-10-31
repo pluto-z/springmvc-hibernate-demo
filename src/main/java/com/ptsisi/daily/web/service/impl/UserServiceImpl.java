@@ -42,7 +42,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 	public void saveOrUpdate(User user, File avatar) {
 		if (avatar != null && avatar.exists()) {
 			try {
-				user.setAvatar(entityDao
+				user.setPortrait(entityDao
 						.createBlob(new FileInputStream(avatar)));
 			} catch (FileNotFoundException e) {
 			}

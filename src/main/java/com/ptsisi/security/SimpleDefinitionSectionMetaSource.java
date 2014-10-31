@@ -23,7 +23,7 @@ public class SimpleDefinitionSectionMetaSource extends AbstractDefinitionSection
 		Map<String, String> permissions = Maps.newHashMap();
 		for (Resource resource : resources) {
 			if (StringUtils.isNotBlank(resource.getPermission())) {
-				permissions.put(resource.getEntry(), resource.getPermission());
+				//permissions.put(resource.getEntry(), resource.getPermission());
 			}
 		}
 		return permissions;

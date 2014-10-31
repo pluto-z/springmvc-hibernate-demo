@@ -1,24 +1,17 @@
 package com.ptsisi.daily.model;
 
-import java.sql.Blob;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.google.common.collect.Sets;
 import com.ptsisi.common.model.IntegerIdTimeObject;
 import com.ptsisi.daily.Role;
 import com.ptsisi.daily.User;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Blob;
+import java.util.Set;
 
 @Entity(name = "com.ptsisi.daily.User")
 @Table(name = "SYS_USERS")
@@ -45,11 +38,13 @@ public class UserBean extends IntegerIdTimeObject implements User {
 	@NotNull
 	private String email;
 	@Lob
-	private Blob avatar;
+	private Blob portrait;
 
 	private boolean enabled = true;
 
-	@ManyToMany(targetEntity = RoleBean.class, mappedBy = "users", fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(name = "SYS_USERS_ROLES", joinColumns = { @JoinColumn(name = "USER_ID", updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", updatable = false) })
 	private Set<Role> roles = Sets.newHashSet();
 
 	@Override public String getUsername() {
@@ -92,12 +87,12 @@ public class UserBean extends IntegerIdTimeObject implements User {
 		this.email = email;
 	}
 
-	@Override public Blob getAvatar() {
-		return avatar;
+	@Override public Blob getPortrait() {
+		return portrait;
 	}
 
-	@Override public void setAvatar(Blob avatar) {
-		this.avatar = avatar;
+	@Override public void setPortrait(Blob portrait) {
+		this.portrait = portrait;
 	}
 
 	@Override public boolean isEnabled() {

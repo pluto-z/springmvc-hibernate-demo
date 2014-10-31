@@ -1,14 +1,14 @@
 package com.ptsisi.daily.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
+import com.ptsisi.common.model.IntegerIdObject;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ptsisi.common.model.IntegerIdObject;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@Entity(name = "com.ptsisi.daily.Resource")
+@Entity(name="com.ptsisi.daily.Resource")
 @Table(name = "SYS_RESOURCES")
 public class ResourceBean extends IntegerIdObject implements com.ptsisi.daily.Resource {
 
@@ -23,7 +23,8 @@ public class ResourceBean extends IntegerIdObject implements com.ptsisi.daily.Re
 
 	@NotBlank
 	@Length(max = 50)
-	private String entry;
+	@Column(unique = true)
+	private String value;
 
 	@Override public String getName() {
 		return name;
@@ -41,11 +42,11 @@ public class ResourceBean extends IntegerIdObject implements com.ptsisi.daily.Re
 		this.permission = permission;
 	}
 
-	@Override public String getEntry() {
-		return entry;
+	@Override public String getValue() {
+		return value;
 	}
 
-	@Override public void setEntry(String entry) {
-		this.entry = entry;
+	@Override public void setValue(String value) {
+		this.value = value;
 	}
 }

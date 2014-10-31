@@ -1,15 +1,16 @@
 package com.ptsisi.daily;
 
-import java.sql.Blob;
-import java.util.Set;
-
 import com.ptsisi.common.Entity;
 import com.ptsisi.common.TimeEntity;
+
+import java.sql.Blob;
+import java.util.Set;
 
 /**
  * Created by zhaoding on 14-10-29.
  */
 public interface User extends Entity, TimeEntity {
+
 	String getUsername();
 
 	void setUsername(String username);
@@ -30,9 +31,9 @@ public interface User extends Entity, TimeEntity {
 
 	void setEmail(String email);
 
-	Blob getAvatar();
+	Blob getPortrait();
 
-	void setAvatar(Blob avatar);
+	void setPortrait(Blob portrait);
 
 	boolean isEnabled();
 
