@@ -10,17 +10,19 @@ import com.ptsisi.daily.User;
  */
 public interface UserService {
 
-	User getUser(Integer id);
+  User getUser(Integer id);
 
-	User getUserByAccount(String username);
+  User getUserByAccount(String username);
 
-	List<User> getUsers();
+  List<User> getUsers();
 
-	void saveOrUpdate(User user, File avatar);
+  void saveOrUpdate(User user, File avatar);
 
-	void saveOrUpdate(User user);
+  void saveOrUpdate(User user);
 
-	void remove(User user);
+  void remove(User user);
 
-	void remove(List<User> users);
+  void remove(List<User> users);
+
+  byte[] getPortrait(User user);
 }

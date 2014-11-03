@@ -14,12 +14,12 @@ import freemarker.template.TemplateModelException;
  */
 public class RequestProviderMothodModel implements TemplateMethodModelEx {
 
-	@Autowired
-	private HttpServletRequest request;
+  @Autowired
+  private HttpServletRequest request;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object exec(List arguments) throws TemplateModelException {
-		return request;
-	}
+  @SuppressWarnings("rawtypes")
+  @Override
+  public Object exec(List arguments) throws TemplateModelException {
+    return request;
+  }
 }

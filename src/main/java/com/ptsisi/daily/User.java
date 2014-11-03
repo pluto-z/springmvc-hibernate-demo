@@ -11,35 +11,37 @@ import java.util.Set;
  */
 public interface User extends Entity, TimeEntity {
 
-	String getUsername();
+  String getUsername();
 
-	void setUsername(String username);
+  void setUsername(String username);
 
-	String getSalt();
+  String getSalt();
 
-	void setSalt(String salt);
+  void setSalt(String salt);
 
-	String getPassword();
+  String getPassword();
 
-	void setPassword(String password);
+  void setPassword(String password);
 
-	String getFullName();
+  String getFullName();
 
-	void setFullName(String fullName);
+  void setFullName(String fullName);
 
-	String getEmail();
+  String getEmail();
 
-	void setEmail(String email);
+  void setEmail(String email);
 
-	Blob getPortrait();
+  Blob getPortrait();
 
-	void setPortrait(Blob portrait);
+  void setPortrait(Blob portrait);
 
-	boolean isEnabled();
+  boolean isEnabled();
 
-	void setEnabled(boolean enabled);
+  void setEnabled(boolean enabled);
 
-	Set<Role> getRoles();
+  Set<Role> getRoles();
 
-	void setRoles(Set<Role> roles);
+  void setRoles(Set<Role> roles);
+
+  Set<Resource> getResources();
 }

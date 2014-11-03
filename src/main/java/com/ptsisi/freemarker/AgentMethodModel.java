@@ -16,12 +16,12 @@ import freemarker.template.TemplateModelException;
  */
 public class AgentMethodModel implements TemplateMethodModelEx {
 
-	@Autowired
-	private HttpServletRequest request;
+  @Autowired
+  private HttpServletRequest request;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object exec(List arguments) throws TemplateModelException {
-		return new Agent(request);
-	}
+  @SuppressWarnings("rawtypes")
+  @Override
+  public Object exec(List arguments) throws TemplateModelException {
+    return new Agent(request);
+  }
 }

@@ -2,7 +2,7 @@ package com.ptsisi.common;
 
 import java.io.Serializable;
 
-public interface Entity extends Serializable{
+public interface Entity extends Serializable {
 
   public Integer getId();
 

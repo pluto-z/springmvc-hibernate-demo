@@ -18,18 +18,19 @@ import java.util.List;
  */
 public class DefaultExceptionHandler implements HandlerExceptionResolver {
 
-	@Override public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
-			Object handler, Exception ex) {
-		if (ex instanceof UnautherizedException) {
-			return new ModelAndView("exception/unauthorized");
-		} else if (ex instanceof ServiceException) {
-			return new ModelAndView("exception/service-exception");
-		} else if (ex instanceof BindException) {
-			List<ObjectError> errors = ((BindException) ex).getAllErrors();
-			RequestContextHolder.getRequestAttributes().setAttribute("errors", errors, RequestAttributes.SCOPE_REQUEST);
-			return new ModelAndView("exception/bind-exception");
-		} else {
-			return new ModelAndView("exception/global-exception");
-		}
-	}
+  @Override
+  public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+      Exception ex) {
+    if (ex instanceof UnautherizedException) {
+      return new ModelAndView("exception/unauthorized");
+    } else if (ex instanceof ServiceException) {
+      return new ModelAndView("exception/service-exception");
+    } else if (ex instanceof BindException) {
+      List<ObjectError> errors = ((BindException) ex).getAllErrors();
+      RequestContextHolder.getRequestAttributes().setAttribute("errors", errors, RequestAttributes.SCOPE_REQUEST);
+      return new ModelAndView("exception/bind-exception");
+    } else {
+      return new ModelAndView("exception/global-exception");
+    }
+  }
 }

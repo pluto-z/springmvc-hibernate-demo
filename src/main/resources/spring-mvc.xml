@@ -65,7 +65,7 @@
                 <prop key="time_format">HH:mm:ss</prop>
                 <prop key="number_format">0.######</prop>
                 <prop key="whitespace_stripping">true</prop>
-                <prop key="auto_import">common/spring.ftl as s</prop>
+                <prop key="auto_import">common/spring.ftl as s,common/base.ftl as b</prop>
             </props>
         </property>
     </bean>
@@ -84,14 +84,12 @@
         <property name="exposeSessionAttributes" value="true"/>
         <property name="exposeSpringMacroHelpers" value="true"/>
         <property name="requestContextAttribute" value="rc"/>
-        <!--
         <property name="attributesMap">
             <map>
                 <entry key="agent" value-ref="agentMethodModel"/>
                 <entry key="fetchRequest" value-ref="requestProviderMothodModel"/>
             </map>
         </property>
-        -->
     </bean>
 
     <bean id="messageSource"

@@ -19,3 +19,7 @@ hs_err_pid*
 bin
 
 src/main/webapp/META-INF/context.xml
+
+work
+.tomcatplugin
+.classpath

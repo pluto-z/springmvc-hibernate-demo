@@ -2,7 +2,7 @@ package com.ptsisi.daily.web.controller.common;
 
 import com.ptsisi.daily.Menu;
 import com.ptsisi.daily.Resource;
-import com.ptsisi.daily.model.SessionPrincipal;
+import com.ptsisi.daily.model.CustomPrincipal;
 import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.daily.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +19,20 @@ import java.util.Set;
 @Controller
 public class HomeController {
 
-	@Autowired
-	protected SecurityService securityService;
+  @Autowired
+  protected SecurityService securityService;
 
-	@Autowired
-	protected UserService userService;
+  @Autowired
+  protected UserService userService;
 
-	@RequestMapping("/home")
-	public ModelAndView index() {
-		SessionPrincipal principal = SessionPrincipal.getCurrentSessionPrincipal();
-		Set<Resource> resources = securityService.getResources(principal.getUser());
-		List<Menu> menus = securityService.getMenus(resources);
-		ModelAndView mv = new ModelAndView("home");
-		mv.addObject("menus", menus);
-		mv.addObject("user", principal.getUser());
-		return mv;
-	}
+  @RequestMapping("home")
+  public ModelAndView index() {
+    CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
+    Set<Resource> resources = principal.getUser().getResources();
+    List<Menu> menus = securityService.getMenus(resources);
+    ModelAndView mv = new ModelAndView("home/index");
+    mv.addObject("menus", menus);
+    mv.addObject("user", principal.getUser());
+    return mv;
+  }
 }

@@ -7,21 +7,21 @@ import org.apache.shiro.authc.AuthenticationException;
  */
 public class AccountNotFoundException extends AuthenticationException {
 
-	private static final long serialVersionUID = -3179257566150215502L;
+  private static final long serialVersionUID = -3179257566150215502L;
 
-	public AccountNotFoundException() {
-		super();
-	}
+  public AccountNotFoundException() {
+    super();
+  }
 
-	public AccountNotFoundException(String message) {
-		super(message);
-	}
+  public AccountNotFoundException(String message) {
+    super(message);
+  }
 
-	public AccountNotFoundException(Throwable cause) {
-		super(cause);
-	}
+  public AccountNotFoundException(Throwable cause) {
+    super(cause);
+  }
 
-	public AccountNotFoundException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public AccountNotFoundException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

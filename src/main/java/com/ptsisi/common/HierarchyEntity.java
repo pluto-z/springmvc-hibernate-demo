@@ -7,18 +7,18 @@ import java.util.List;
  */
 public interface HierarchyEntity<T> extends Entity {
 
-	int getIndexNo();
+  int getIndexNo();
 
-	void setIndexNo(int indexNo);
+  void setIndexNo(int indexNo);
 
-	T getParent();
+  T getParent();
 
-	void setParent(T parent);
+  void setParent(T parent);
 
-	List<T> getChildren();
+  List<T> getChildren();
 
-	void setChildren(List<T> children);
+  void setChildren(List<T> children);
 
-	String getIndex();
+  String getIndex();
 
 }

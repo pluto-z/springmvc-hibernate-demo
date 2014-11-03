@@ -7,15 +7,15 @@ import com.ptsisi.common.Entity;
  */
 public interface Resource extends Entity {
 
-	String getName();
+  String getName();
 
-	void setName(String name);
+  void setName(String name);
 
-	String getPermission();
+  String getPermission();
 
-	void setPermission(String permission);
+  void setPermission(String permission);
 
-	String getValue();
+  String getValue();
 
-	void setValue(String value);
+  void setValue(String value);
 }

@@ -1,7 +1,5 @@
 package com.ptsisi.daily;
 
-import com.ptsisi.daily.model.MenuBean;
-
 import java.util.Set;
 
 /**
@@ -9,23 +7,23 @@ import java.util.Set;
  */
 public interface Menu extends Comparable<Menu>, com.ptsisi.common.HierarchyEntity<Menu> {
 
-	String getName();
+  String getName();
 
-	void setName(String name);
+  void setName(String name);
 
-	String getEntry();
+  String getEntry();
 
-	void setEntry(String entry);
+  void setEntry(String entry);
 
-	Set<Resource> getResources();
+  Set<Resource> getResources();
 
-	void setResources(Set<Resource> resources);
+  void setResources(Set<Resource> resources);
 
-	boolean isEnabled();
+  boolean isEnabled();
 
-	void setEnabled(boolean enabled);
+  void setEnabled(boolean enabled);
 
-	String getIcon();
+  String getIcon();
 
-	void setIcon(String icon);
+  void setIcon(String icon);
 }

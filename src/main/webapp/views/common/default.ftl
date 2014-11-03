@@ -24,23 +24,6 @@
     [#include "info.ftl" /]
     [#include "profile-setting.ftl" /]
 [/@]
-<div class="main-container container">
-    <div class="panel panel-default border-black">
-        <div class="panel-heading large heading-background"></div>
-        <div class="content-container">
-            <div class="content-widget">
-                <div class="content-widget">
-                    <div class="content-widget" id="content-widget">
-                    [@shiro.user]
-                        [#include "navbar.ftl" /]
-                    [/@]
-                    [@body/]
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <script type="text/javascript" src="${base}/static/plugins/jquery/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${base}/static/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${base}/static/plugins/jquery-form/jquery.form.min.js"></script>

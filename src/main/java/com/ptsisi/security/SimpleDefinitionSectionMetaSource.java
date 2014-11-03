@@ -14,17 +14,18 @@ import java.util.Map;
  */
 public class SimpleDefinitionSectionMetaSource extends AbstractDefinitionSectionMetaSource {
 
-	@Autowired
-	protected SecurityService securityService;
+  @Autowired
+  protected SecurityService securityService;
 
-	@Override protected Map<String, String> initOtherPermission() {
-		List<Resource> resources = securityService.getResources();
-		Map<String, String> permissions = Maps.newHashMap();
-		for (Resource resource : resources) {
-			if (StringUtils.isNotBlank(resource.getPermission())) {
-				permissions.put(resource.getValue(), resource.getPermission());
-			}
-		}
-		return permissions;
-	}
+  @Override
+  protected Map<String, String> initOtherPermission() {
+    List<Resource> resources = securityService.getResources();
+    Map<String, String> permissions = Maps.newHashMap();
+    for (Resource resource : resources) {
+      if (StringUtils.isNotBlank(resource.getPermission())) {
+        permissions.put(resource.getValue(), resource.getPermission());
+      }
+    }
+    return permissions;
+  }
 }

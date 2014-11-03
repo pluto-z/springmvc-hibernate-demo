@@ -9,22 +9,22 @@ import com.ptsisi.common.Entity;
  */
 public interface Role extends Entity {
 
-	public static final Integer ADMIN = 1;
-	public static final Integer USER = 2;
+  public static final Integer ADMIN = 1;
+  public static final Integer USER = 2;
 
-	String getName();
+  String getName();
 
-	void setName(String name);
+  void setName(String name);
 
-	String getDescription();
+  String getDescription();
 
-	void setDescription(String description);
+  void setDescription(String description);
 
-	Set<User> getUsers();
+  Set<User> getUsers();
 
-	void setUsers(Set<User> users);
+  void setUsers(Set<User> users);
 
-	Set<Resource> getResources();
+  Set<Resource> getResources();
 
-	void setResources(Set<Resource> resources);
+  void setResources(Set<Resource> resources);
 }

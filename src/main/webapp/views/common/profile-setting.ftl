@@ -95,11 +95,11 @@
 					   			<div class="row">
 					    			<div class="col-xs-6">
 										<label for="nickname">昵称:</label>
-										<input type="text" class="form-control required" maxlength="16" name="nickname" id="nickname" value="${Session['SESSION_PRINCIPAL'].user.fullName!''}">
+										<input type="text" class="form-control required" maxlength="16" name="nickname" id="nickname" value="${user.fullName!''}">
 									</div>
 									<div class="col-xs-6">
 										<label for="email">电子邮箱:</label> 
-										<input type="text" class="form-control email" name="email" maxlength="64" id="email"  value="${Session['SESSION_PRINCIPAL'].user.email!''}">
+										<input type="text" class="form-control email" name="email" maxlength="64" id="email"  value="${user.email!''}">
 									</div>
 					   			</div>
 				   			</div>

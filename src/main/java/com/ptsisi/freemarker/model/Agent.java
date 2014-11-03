@@ -7,21 +7,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Agent {
 
-	private final String browser;
+  private final String browser;
 
-	private final String version;
+  private final String version;
 
-	public Agent(HttpServletRequest request) {
-		Browser browser = Browser.parse(request.getHeader("USER-AGENT"));
-		this.browser = browser.category.getName();
-		this.version = browser.version;
-	}
+  public Agent(HttpServletRequest request) {
+    Browser browser = Browser.parse(request.getHeader("USER-AGENT"));
+    this.browser = browser.category.getName();
+    this.version = browser.version;
+  }
 
-	public String getBrowser() {
-		return browser;
-	}
+  public String getBrowser() {
+    return browser;
+  }
 
-	public String getVersion() {
-		return version;
-	}
+  public String getVersion() {
+    return version;
+  }
 }
