@@ -11,11 +11,11 @@
 
     <description>Spring MVC Configuration</description>
 
-    <aop:aspectj-autoproxy proxy-target-class="true" />
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 自动扫描且只扫描@Controller -->
     <context:component-scan base-package="com.ptsisi.daily.web.controller" use-default-filters="false">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <!-- 使用缓存mvc注解配置 -->
@@ -33,7 +33,7 @@
     </mvc:annotation-driven>
 
     <!-- 使用默认的servlet handler -->
-    <mvc:default-servlet-handler />
+    <mvc:default-servlet-handler/>
 
     <!-- 静态资源的访问 -->
     <mvc:resources location="/static/" mapping="/static/**"/>
@@ -65,7 +65,7 @@
                 <prop key="time_format">HH:mm:ss</prop>
                 <prop key="number_format">0.######</prop>
                 <prop key="whitespace_stripping">true</prop>
-                <prop key="auto_import">common/spring.ftl as s,common/base.ftl as b</prop>
+                <prop key="auto_import">common/spring.ftl as s</prop>
             </props>
         </property>
     </bean>
@@ -84,12 +84,14 @@
         <property name="exposeSessionAttributes" value="true"/>
         <property name="exposeSpringMacroHelpers" value="true"/>
         <property name="requestContextAttribute" value="rc"/>
+        <!--
         <property name="attributesMap">
             <map>
                 <entry key="agent" value-ref="agentMethodModel"/>
                 <entry key="fetchRequest" value-ref="requestProviderMothodModel"/>
             </map>
         </property>
+        -->
     </bean>
 
     <bean id="messageSource"
@@ -104,4 +106,6 @@
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
           p:defaultEncoding="UTF-8" p:maxUploadSize="1024000000" p:resolveLazily="true" p:maxInMemorySize="4096"/>
+
+    <bean id="exceptionResolver" class="com.ptsisi.daily.web.handler.DefaultExceptionHandler"/>
 </beans>

@@ -1,16 +1,17 @@
-<#include "*/basic/default.html"/>
+[#ftl]
+[#include "../common/default.ftl"/]
 
-<#macro title>
+[#macro title]
 	未授权的操作
-</#macro>
+[/#macro]
 
-<#macro body>
-	<div class="server-exception"> 
+[#macro body]
+	<div class="server-exception">
    		<p><center><h1><span class="glyphicon glyphicon-ban-circle"></span></h1></p></center>
-   		<h3>访问控制</h3> 
-   		<hr> 
-   		<p>你没有足够的权限做该操作.</p> 
-   		<hr> 
+   		<h3>访问控制</h3>
+   		<hr>
+   		<p>你没有足够的权限做该操作.</p>
+   		<hr>
    		<p>
    			<a class="btn btn-default" href="javascript:history.back()">
 				<span class="glyphicon glyphicon-backward"></span> 返回
@@ -20,5 +21,4 @@
 			</a>
    		</p>
    	</div>
-</#macro>
-
+[/#macro]

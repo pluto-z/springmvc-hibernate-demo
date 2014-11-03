@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import com.ptsisi.daily.model.UserBean;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,7 +26,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
 	@Cacheable(value = "app")
 	public User getUser(Integer id) {
-		return entityDao.get(User.class, id);
+		return entityDao.get(UserBean.class, id);
 	}
 
 	@Cacheable(value = "app")
@@ -58,7 +59,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 			role.getUsers().add(user);
 			toSave.add(role);
 		}
-		user.setEmail(user.getUsername());
 		toSave.add(user);
 		entityDao.saveOrUpdate(toSave);
 	}

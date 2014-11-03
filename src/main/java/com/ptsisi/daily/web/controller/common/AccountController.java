@@ -1,12 +1,11 @@
 package com.ptsisi.daily.web.controller.common;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import com.ptsisi.daily.User;
+import com.ptsisi.daily.model.UserBean;
+import com.ptsisi.daily.web.service.UserService;
+import com.ptsisi.security.UnautherizedException;
+import com.ptsisi.security.utils.CaptchaProvider;
+import com.ptsisi.security.utils.PasswordUtil;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ptsisi.daily.User;
-import com.ptsisi.daily.model.UserBean;
-import com.ptsisi.daily.web.service.UserService;
-import com.ptsisi.security.utils.CaptchaProvider;
-import com.ptsisi.security.utils.PasswordUtil;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by zhaoding on 14-10-27.
@@ -42,6 +41,11 @@ public class AccountController {
 			return "index";
 		}
 		return "redirect:/home";
+	}
+
+	@RequestMapping("/unauthroized")
+	public String unauthroized() {
+		throw new UnautherizedException("没有授权");
 	}
 
 	@RequestMapping("/register")

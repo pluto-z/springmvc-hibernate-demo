@@ -1,4 +1,2 @@
 [#ftl]
-[@b.head]
 asfsafsafddd
-[/@]

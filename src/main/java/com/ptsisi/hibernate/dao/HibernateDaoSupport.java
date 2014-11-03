@@ -70,7 +70,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 获取全部对象，带排序功能
-	 * 
+	 *
 	 * @param <T>
 	 * @param entityClass
 	 *            实体对象
@@ -100,7 +100,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 保存对象
-	 * 
+	 *
 	 * @param entity
 	 */
 	@Override
@@ -198,7 +198,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 删除对象
-	 * 
+	 *
 	 * @param entity
 	 */
 	@Override
@@ -223,7 +223,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 根据Id获取对象。
-	 * 
+	 *
 	 * @param <T>
 	 * @param entityClass
 	 * @param id
@@ -246,7 +246,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 创建一个Query对象。
-	 * 
+	 *
 	 * @param hql
 	 * @param values
 	 * @return
@@ -263,7 +263,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 创建Criteria对象。
-	 * 
+	 *
 	 * @param <T>
 	 * @param entityClass
 	 * @param criterions
@@ -281,7 +281,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 创建Criteria对象，有排序功能。
-	 * 
+	 *
 	 * @param <T>
 	 * @param entityClass
 	 * @param orderBy
@@ -310,7 +310,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 根据hql查询
-	 * 
+	 *
 	 * @param hql
 	 * @param values
 	 * @return
@@ -325,7 +325,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 根据属性名和属性值查询.
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -339,7 +339,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 根据属性名和属性值查询. 有排序
-	 * 
+	 *
 	 * @param <T>
 	 * @param entityClass
 	 * @param propertyName
@@ -360,7 +360,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 根据属性名和属性值 查询 且要求对象唯一.
-	 * 
+	 *
 	 * @return 符合条件的唯一对象.
 	 */
 	@Override
@@ -374,7 +374,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 分页 通过hql进行
-	 * 
+	 *
 	 * @param hql
 	 * @param pageNo
 	 * @param pageSize
@@ -402,7 +402,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 分页 通过criteria
-	 * 
+	 *
 	 * @param criteria
 	 * @param pageNo
 	 * @param pageSize
@@ -435,7 +435,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 分页查询函数
-	 * 
+	 *
 	 * @param entityClass
 	 * @param pageNo
 	 * @param pageSize
@@ -451,7 +451,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 分页查询带排序
-	 * 
+	 *
 	 * @param entityClass
 	 * @param pageNo
 	 * @param pageSize
@@ -471,7 +471,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 去除hql的select子句。
-	 * 
+	 *
 	 * @param hql
 	 * @return
 	 * @see #pagedQuery(String, int, int, Object[])
@@ -485,7 +485,7 @@ public class HibernateDaoSupport implements HibernateDaoHandler,
 
 	/**
 	 * 去除hql的orderBy子句。
-	 * 
+	 *
 	 * @param hql
 	 * @return
 	 * @see #pagedQuery(String, int, int, Object[])

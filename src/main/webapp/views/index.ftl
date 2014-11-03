@@ -80,7 +80,7 @@
                             </span>
                             <input id="login_username" type="text" title="用户名" value="${username!?js_string}"
                                    name="username"
-                                   placeholder="邮箱"
+                                   placeholder="请输入用户名"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                                 <span class="glyphicon glyphicon-lock"></span>
                             </span>
                             <input id="login_password" type="password" title="密码" name="password"
-                                   placeholder="密码"
+                                   placeholder="请输入密码"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
 								<span class="glyphicon glyphicon-align-justify"></span>
 							</span>
                             <input id="login_captcha" type="text" title="验证码" name="captcha"
-                                   placeholder="验证码"
+                                   placeholder="请输入验证码"
                                    class="form-control input-lg"/>
 
                             <div class="input-group-addon" style="padding:0">
@@ -135,20 +135,9 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-user"></span>
                             </span>
-                            <input id="register_fullname" type="text" title="姓名" value="${fullName!?js_string}"
-                                   name="fullName"
-                                   placeholder="姓名"
-                                   class="form-control input-lg"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-user"></span>
-                            </span>
                             <input id="register_username" type="text" title="用户名" value="${username!?js_string}"
                                    name="username"
-                                   placeholder="邮箱"
+                                   placeholder="请输入用户名"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -158,7 +147,7 @@
                                 <span class="glyphicon glyphicon-lock"></span>
                             </span>
                             <input id="register_password" type="password" title="密码" name="password"
-                                   placeholder="密码"
+                                   placeholder="请输入密码"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -167,8 +156,29 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-repeat"></span>
                             </span>
-                            <input id="register_password2" type="password" title="重复密码" name="password2"
-                                   placeholder="重复密码"
+                            <input id="register_password2" type="password" title="确认密码" name="password2"
+                                   placeholder="请确认密码"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </span>
+                            <input id="register_fullname" type="text" title="姓名" value="${fullName!?js_string}"
+                                   name="fullName"
+                                   placeholder="请输入姓名"
+                                   class="form-control input-lg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-envelope"></span>
+                            </span>
+                            <input id="register_email" type="text" title="邮箱" name="email"
+                                   placeholder="请输入邮箱"
                                    class="form-control input-lg"/>
                         </div>
                     </div>
@@ -178,7 +188,7 @@
 								<span class="glyphicon glyphicon-align-justify"></span>
 							</span>
                             <input id="register_captcha" type="text" title="验证码" name="captcha"
-                                   placeholder="验证码"
+                                   placeholder="请输入验证码"
                                    class="form-control input-lg"/>
 
                             <div class="input-group-addon" style="padding:0">
@@ -202,7 +212,7 @@
 <script>
     $(function () {
         $("form[name='loginForm']").validity(function () {
-            $("#login_username").require().match('email').maxLength(32);
+            $("#login_username").require().maxLength(32);
             $("#login_password").require().maxLength(10).minLength(6);
         [#if needCaptcha??]
             $("#login_captcha").require();
@@ -210,7 +220,8 @@
         });
         $("form[name='registerForm']").validity(function () {
             $("#register_fullname").require().maxLength(50);
-            $("#register_username").require().match('email').maxLength(32);
+            $("#register_username").require().maxLength(32);
+            $("#register_email").require().maxLength(50).match('email');
             $("#register_password").require().maxLength(10).minLength(6);
             $("#register_password2").require().maxLength(10).minLength(6).assert(function () {
                 return  $("#register_password").val() == $("#register_password2").val();

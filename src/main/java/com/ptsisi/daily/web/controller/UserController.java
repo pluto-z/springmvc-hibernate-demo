@@ -22,8 +22,6 @@ public class UserController {
 
 	@RequestMapping("/index")
 	public ModelAndView index(UserBean user, ModelAndView modelAndView, HttpServletRequest request) {
-		System.out.println(1111);
-		System.out.println(modelAndView.getModel().size());
 		//		userService.saveOrUpdate(user);
 		return new ModelAndView("user/list");
 	}

@@ -38,8 +38,8 @@ public class PasswordUtil {
 
 	public static void main(String[] args) {
 		User user = new UserBean();
-		user.setUsername("pluto4321@163.com");
-		user.setPassword("1986020");
+		user.setUsername("zhangchengsi");
+		user.setPassword("19870720");
 		populateEncryptInfo(user);
 		System.out.println(user.getSalt());
 		System.out.println(user.getPassword());
@@ -49,7 +49,7 @@ public class PasswordUtil {
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(),
 				new DefaultRealm().getName());
 		info.setCredentialsSalt(PasswordUtil.getSimpleHash(user).getSalt());
-		AuthenticationToken token = new UsernamePasswordToken(user.getUsername(), "1986020");
+		AuthenticationToken token = new UsernamePasswordToken(user.getUsername(), "19870720");
 		credentialsMatcher.doCredentialsMatch(token, info);
 	}
 }

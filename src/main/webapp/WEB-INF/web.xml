@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 			     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0" metadata-complete="true">
-    <display-name>baidu-keyword-search</display-name>
+    <display-name>daily</display-name>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -97,5 +97,10 @@
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/error-page/500.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>org.apache.shiro.authz.UnauthorizedException</exception-type>
+        <location>/exception/unauthorized.ftl</location>
     </error-page>
 </web-app>

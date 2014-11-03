@@ -46,6 +46,7 @@
         <!-- 默认的连接配置 -->
         <property name="filterChainDefinitions">
             <value>
+                /=anon
                 /login=captchaAuthc
                 /register=anon
                 /get-captcha=anon
