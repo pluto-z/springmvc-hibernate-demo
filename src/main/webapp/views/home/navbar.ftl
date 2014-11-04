@@ -39,7 +39,7 @@
         	<ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
             	<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            		<img class="img-circle user-portrait" src="${base}/user/get-portrait" onerror="this.src='${base}/static/images/empty.jpg';">
+            		<img class="img-circle user-portrait" src="${base}/security/user/get-portrait" onerror="this.src='${base}/static/images/empty.jpg';">
                     	<span class="hidden-xs" id="info-nickname">
                             欢迎, ${user.fullName!user.username}
                     	</span>

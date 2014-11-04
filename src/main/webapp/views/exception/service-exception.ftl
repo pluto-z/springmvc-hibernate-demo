@@ -1,11 +1,5 @@
-<#include "*/basic/default.html"/>
-
-<#macro title>
-	处理失败
-</#macro>
-
-<#macro body>
-
+[#ftl]
+[@b.head]
 	<div class="server-exception"> 
 		
    		<center><h1><span class="glyphicon glyphicon-info-sign"></span></h1></center>
@@ -20,5 +14,4 @@
    			</button>
    		</p>
    	</div>
-</#macro>
-
+[/@]

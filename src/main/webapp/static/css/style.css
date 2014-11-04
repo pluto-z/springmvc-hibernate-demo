@@ -5,6 +5,11 @@ body {
 	background-repeat:no-repeat;
 }
 */
+
+.main-container{
+	margin-left:5%;
+	margin-right:5%;
+}
 .text {
 	height: 50px;
 	line-height: 1.5cm !important;

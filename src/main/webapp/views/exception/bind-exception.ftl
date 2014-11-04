@@ -1,12 +1,6 @@
-<#include "*/basic/default.html"/>
-
-<#macro title>
-验证错误
-</#macro>
-
-<#macro body>
-
-<div class="server-exception">
+[#ftl]
+[@b.head]
+	<div class="server-exception">
 
     <center><h1><span class="glyphicon glyphicon-question-sign"></span></h1></center>
 
@@ -24,5 +18,4 @@
         </button>
     </p>
 </div>
-</#macro>
-
+[/@]

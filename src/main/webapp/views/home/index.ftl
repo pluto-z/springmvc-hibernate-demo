@@ -15,6 +15,8 @@ $(function(){
 	$(".menu-entry").click(function(){
 		var url = $(this).attr("data-href");
 		var target = $(this).attr("target");
+		$("ul.nav").find(".active").removeClass("active");
+		alert($(this).parent(".dropdown").html())
 		$.ajax({
         	url: url,
         	async: false,
@@ -23,17 +25,24 @@ $(function(){
 	      dataType: "html",
 	      complete: function(jqXHR) {
       		target="#"+target;
+      		try {
+	              jQuery(target).html(jqXHR.responseText);
+	            } catch(e){
+	            	alert(e);
+	            	}
           	if(jQuery(target).html().length>0){
             	//bg.history.snapshot();
             	//History.pushState({content:jqXHR.responseText,container:target},"",url);
           	}else{
-            	//var state=History.getState();
-	            //History.replaceState({content:jqXHR.responseText,container:target,updatedAt:(new Date()).getTime()},state.title,state.url);
+            	/*
+            	var state=History.getState();
+	            History.replaceState({content:jqXHR.responseText,container:target,updatedAt:(new Date()).getTime()},state.title,state.url);
 	            try {
 	              jQuery(target).html(jqXHR.responseText);
 	            } catch(e){
 	            	alert(e);
 	            	}
+	            	*/
 	          	}
 	        }
   		});
