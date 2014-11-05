@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ptsisi.common.lang.ClassLoaders;
 import com.ptsisi.common.metadata.EntityType;
 import com.ptsisi.common.metadata.Type;
 
@@ -22,7 +23,7 @@ public class SimpleEntityContext extends AbstractEntityContext {
   public void init() throws Exception {
     Properties props = new Properties();
     try {
-      InputStream is = ClassLoader.class.getResourceAsStream("model.properties");
+      InputStream is = ClassLoaders.getResourceAsStream("model.properties", getClass());
       if (null != is) {
         props.load(is);
       }

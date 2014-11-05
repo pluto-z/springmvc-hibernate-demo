@@ -2,6 +2,8 @@ package com.ptsisi.daily.web.handler;
 
 import com.ptsisi.common.exception.ServiceException;
 import com.ptsisi.security.UnautherizedException;
+
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestAttributes;
@@ -11,11 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 /**
  * Created by zhaoding on 14-11-3.
  */
+@Component(value="exceptionResolver")
 public class DefaultExceptionHandler implements HandlerExceptionResolver {
 
   @Override

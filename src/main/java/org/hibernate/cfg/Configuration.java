@@ -2659,6 +2659,7 @@ public class Configuration implements Serializable {
 			return persistentClass;
 		}
 
+		//TODO replace the hibernate default entity name to jpa entity name(annotation'targetEntity') to support use interface in pojo  
 		public void addClass(PersistentClass persistentClass) throws DuplicateMappingException {
 			final String jpaEntityName = persistentClass.getJpaEntityName();
 			if (StringUtils.isNotBlank(jpaEntityName)) {

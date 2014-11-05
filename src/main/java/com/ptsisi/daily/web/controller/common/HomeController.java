@@ -1,17 +1,18 @@
 package com.ptsisi.daily.web.controller.common;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.ptsisi.daily.Menu;
 import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.model.CustomPrincipal;
 import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.daily.web.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zhaoding on 14-10-28.
@@ -26,13 +27,11 @@ public class HomeController {
   protected UserService userService;
 
   @RequestMapping("home")
-  public ModelAndView index() {
+  public void index(Model model) {
     CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
     Set<Resource> resources = principal.getUser().getResources();
     List<Menu> menus = securityService.getMenus(resources);
-    ModelAndView mv = new ModelAndView("home/index");
-    mv.addObject("menus", menus);
-    mv.addObject("user", principal.getUser());
-    return mv;
+    model.addAttribute("menus", menus);
+    model.addAttribute("user", principal.getUser());
   }
 }

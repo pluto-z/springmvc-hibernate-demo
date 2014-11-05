@@ -33,7 +33,7 @@ public class UserController extends AbstractController {
 
   @RequestMapping("list")
   @RequiresPermissions("user:list")
-  public String list(Boolean enabled, UserBean user, String orderBy, PageLimit pageLimit,ModelMap modelMap) {
+  public String list(Boolean enabled, UserBean user, String orderBy, PageLimit pageLimit, ModelMap modelMap) {
     OqlBuilder<User> builder = getQueryBuilder(orderBy, pageLimit);
     if (StringUtils.isNotBlank(user.getUsername())) {
       builder.where(getShortName() + ".username like :username", "%" + user.getUsername() + "%");
@@ -45,7 +45,7 @@ public class UserController extends AbstractController {
       builder.where(getShortName() + ".enabled = :enabled", enabled);
     }
     modelMap.addAttribute("users", entityDao.search(builder));
-    return "security/user/list";
+    return "list";
   }
 
   @RequestMapping("get-portrait")

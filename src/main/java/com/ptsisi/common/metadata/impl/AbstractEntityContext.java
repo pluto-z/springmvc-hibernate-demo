@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ptsisi.common.Entity;
+import com.ptsisi.common.lang.ClassLoaders;
 import com.ptsisi.common.metadata.EntityContext;
 import com.ptsisi.common.metadata.EntityType;
 import com.ptsisi.common.metadata.IdentifierType;
@@ -82,7 +83,7 @@ public abstract class AbstractEntityContext implements EntityContext {
     // last try by it's interface
     if (null == type) {
       try {
-        Class<?> entityClass = ClassLoader.getSystemClassLoader().loadClass(entityName);
+        Class<?> entityClass = ClassLoaders.loadClass(entityName);
         if (Entity.class.isAssignableFrom(entityClass)) type = new EntityType(entityClass);
         else logger.warn("{} 's is not entity", entityClass);
       } catch (Exception e) {
