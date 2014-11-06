@@ -1,20 +1,20 @@
 package com.ptsisi.security;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Maps;
 import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.web.service.SecurityService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhaoding on 14-10-28.
  */
 public class SimpleDefinitionSectionMetaSource extends AbstractDefinitionSectionMetaSource {
 
-  @Autowired
+  @javax.annotation.Resource
   protected SecurityService securityService;
 
   @Override

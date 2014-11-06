@@ -23,6 +23,7 @@
 		<constructor-arg>
 			<list>
 				<value>text/plain;charset=UTF-8</value>
+				<value>*/*</value>
 			</list>
 		</constructor-arg>
 	</bean>
@@ -33,6 +34,8 @@
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter"
 				p:supportedMediaTypes-ref="supportedMediaTypes" />
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" p:prettyPrint="true"/>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
@@ -48,12 +51,6 @@
 
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
 
-	<bean id="defaultTemplateLoader" class="com.ptsisi.router.DefaultTemplateLoader">
-		<constructor-arg>
-			<value>/pages/</value>
-		</constructor-arg>
-	</bean>
-
 	<bean id="preTemplateLoaders" class="java.util.ArrayList">
 		<constructor-arg>
 			<list>
@@ -68,41 +65,18 @@
 			</map>
 		</constructor-arg>
 	</bean>
-	<bean id="freemarkerSettings"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="properties">
-			<props>
-				<prop key="template_update_delay">0</prop>
-				<prop key="tag_syntax">auto_detect</prop>
-				<prop key="defaultEncoding">UTF-8</prop>
-				<prop key="url_escaping_charset">UTF-8</prop>
-				<prop key="locale">zh_CN</prop>
-				<prop key="boolean_format">true,false</prop>
-				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-				<prop key="date_format">yyyy-MM-dd</prop>
-				<prop key="time_format">HH:mm:ss</prop>
-				<prop key="number_format">0.######</prop>
-				<prop key="whitespace_stripping">true</prop>
-				<prop key="auto_import">common/spring.ftl as s,common/base.ftl as b</prop>
-			</props>
-		</property>
-	</bean>
 
 	<!-- freemarker的配置 -->
 	<bean id="freemarkerConfigurer"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"
 		p:defaultEncoding="UTF-8" p:templateLoaderPath="/pages/"
 		p:preTemplateLoaders-ref="preTemplateLoaders"
-		p:freemarkerVariables-ref="freemarkerVariables"
-		p:freemarkerSettings-ref="freemarkerSettings" />
+		p:freemarkerVariables-ref="freemarkerVariables" p:configLocation="classpath:META-INF/freemarker.properties" />
 
-	<bean id="agentMethodModel" class="com.ptsisi.freemarker.AgentMethodModel" />
-	<bean id="requestProviderMothodModel" class="com.ptsisi.freemarker.RequestProviderMothodModel" />
-	<bean id="attributesMap" class="java.util.HashMap">
+	<bean id="tagLibraryProviderFactory" class="com.ptsisi.ui.tagModel.TagLibraryProviderFactory">
 		<constructor-arg>
 			<map>
-				<entry key="agent" value-ref="agentMethodModel" />
-				<entry key="fetchRequest" value-ref="requestProviderMothodModel" />
+				<entry key="d" value-ref="defaultTagLibraryProvider" />
 			</map>
 		</constructor-arg>
 	</bean>
@@ -113,8 +87,7 @@
 		p:cache="false" p:suffix=".ftl" p:contentType="text/html; charset=UTF-8"
 		p:exposeRequestAttributes="true" p:exposeSessionAttributes="true"
 		p:exposeSpringMacroHelpers="true" p:requestContextAttribute="rc"
-		p:viewClass="org.springframework.web.servlet.view.freemarker.FreeMarkerView"
-		p:attributesMap-ref="attributesMap" />
+		p:viewClass="com.ptsisi.view.DefaultFreeMarkerView" />
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource"

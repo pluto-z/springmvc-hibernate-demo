@@ -23,3 +23,5 @@ src/main/webapp/META-INF/context.xml
 work
 .tomcatplugin
 .classpath
+
+.idea

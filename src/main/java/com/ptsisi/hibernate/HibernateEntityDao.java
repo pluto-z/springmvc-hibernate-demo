@@ -28,7 +28,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -40,6 +39,7 @@ import com.ptsisi.common.Entity;
 import com.ptsisi.common.collection.page.Page;
 import com.ptsisi.common.collection.page.PageLimit;
 import com.ptsisi.common.collection.page.SinglePage;
+import com.ptsisi.common.collection.page.SinglePageWrapper;
 import com.ptsisi.common.dao.EntityDao;
 import com.ptsisi.common.dao.Operation;
 import com.ptsisi.common.metadata.ModelMeta;
@@ -54,10 +54,10 @@ public class HibernateEntityDao implements EntityDao {
 
   protected Logger logger = LoggerFactory.getLogger(getClass());
 
-  @Autowired
+  @Resource
   protected SessionFactory sessionFactory;
 
-  @Autowired
+  @Resource
   protected ModelMeta modelMeta;
 
   protected Session getSession() {
@@ -147,6 +147,16 @@ public class HibernateEntityDao implements EntityDao {
       params.put(attrs[i], values[i]);
     }
     return get(clazz, params);
+  }
+
+  @Override
+  public <T> Object searchObj(QueryBuilder<T> builder) {
+    List<T> datas = search(builder);
+    if (datas instanceof SinglePage) {
+      SinglePage<?> page = (SinglePage<?>) datas;
+      return new SinglePageWrapper(page.getTotal(), page.getItems());
+    }
+    return datas;
   }
 
   /**

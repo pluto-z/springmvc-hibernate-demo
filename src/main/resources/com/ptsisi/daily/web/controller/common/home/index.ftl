@@ -1,52 +1,14 @@
-[#ftl]
-[@b.head]
-[#assign base= rc.contextPath/]
-[#include "navbar.ftl"/]
-<div class="main-container border-black" id="contentDiv">
-aa
+[#macro body]
+<h1>this is index page</h1>
+<a href="javascript:void(0)" id="indexA">aaa</a>
+<br/>
+<div id="indexDiv" class="ajaxcontainer" style="width:300px;height:300px;border: 2px solid rgba(20, 20, 20, 0.3);">div
 </div>
 <script>
-$(function(){
- 	setInterval(function(){
-    	var date = new Date();
-    	$("#date").text(date.toLocaleString());
-	},100);
-	
-	$(".menu-entry").click(function(){
-		var url = $(this).attr("data-href");
-		var target = $(this).attr("target");
-		$("ul.nav").find(".active").removeClass("active");
-		alert($(this).parent(".dropdown").html())
-		$.ajax({
-        	url: url,
-        	async: false,
-        	cache:false,
-	      type: "POST",
-	      dataType: "html",
-	      complete: function(jqXHR) {
-      		target="#"+target;
-      		try {
-	              jQuery(target).html(jqXHR.responseText);
-	            } catch(e){
-	            	alert(e);
-	            	}
-          	if(jQuery(target).html().length>0){
-            	//bg.history.snapshot();
-            	//History.pushState({content:jqXHR.responseText,container:target},"",url);
-          	}else{
-            	/*
-            	var state=History.getState();
-	            History.replaceState({content:jqXHR.responseText,container:target,updatedAt:(new Date()).getTime()},state.title,state.url);
-	            try {
-	              jQuery(target).html(jqXHR.responseText);
-	            } catch(e){
-	            	alert(e);
-	            	}
-	            	*/
-	          	}
-	        }
-  		});
-	})
-});
+    $(function () {
+        $("#indexA").click(function () {
+            _.go("${base}/homeList", "#indexDiv", {"id": "1"})
+        })
+    })
 </script>
-[/@]
+[/#macro]

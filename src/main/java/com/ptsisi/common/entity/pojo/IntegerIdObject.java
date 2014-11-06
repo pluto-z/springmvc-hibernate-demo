@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ptsisi.common.Entity;
 import com.ptsisi.common.predicate.ValidEntityKeyPredicate;
 
@@ -29,10 +30,12 @@ public abstract class IntegerIdObject implements Entity {
     this.id = id;
   }
 
+  @JsonIgnore
   public boolean isPersisted() {
     return ValidEntityKeyPredicate.Instance.evaluate(id);
   }
 
+  @JsonIgnore
   public boolean isTransient() {
     return !ValidEntityKeyPredicate.Instance.evaluate(id);
   }

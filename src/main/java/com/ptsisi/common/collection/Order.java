@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Order {
 
-  public static final String ORDER_STR = "orderBy";
+  public static final String ORDER_STR = "sort";
+
+  public static final String ORDER_ASC = "order";
 
   private String property;
 
@@ -22,6 +24,10 @@ public class Order {
   public Order(String property, boolean ascending) {
     this.property = property;
     this.ascending = ascending;
+  }
+
+  public Order(String property, String order) {
+    this(property, !"desc".equalsIgnoreCase(order));
   }
 
   public Order(String property) {
@@ -80,6 +86,10 @@ public class Order {
       }
     }
     return buf.substring(0, buf.length() - 1).toString();
+  }
+
+  public static Order parse(final String sort, final String order) {
+    return new Order(sort, order);
   }
 
   public static List<Order> parse(final String orderString) {

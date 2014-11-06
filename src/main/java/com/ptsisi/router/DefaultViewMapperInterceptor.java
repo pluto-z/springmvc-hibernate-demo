@@ -1,5 +1,8 @@
 package com.ptsisi.router;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,11 +11,20 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ptsisi.daily.Menu;
+import com.ptsisi.daily.Resource;
+import com.ptsisi.daily.model.CustomPrincipal;
+import com.ptsisi.daily.web.service.SecurityService;
+import com.ptsisi.security.UnautherizedException;
+
 public class DefaultViewMapperInterceptor implements HandlerInterceptor {
 
   final static char separator = '/';
 
   final static String POSTFIX = "Controller";
+
+  @javax.annotation.Resource
+  private SecurityService securityService;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -23,6 +35,17 @@ public class DefaultViewMapperInterceptor implements HandlerInterceptor {
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
       ModelAndView modelAndView) throws Exception {
     if (modelAndView != null) {
+      try {
+        CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
+        Set<Resource> resources = principal.getUser().getResources();
+        List<Menu> menus = securityService.getMenus(resources);
+        modelAndView.addObject("menus", menus);
+        modelAndView.addObject("user", principal.getUser());
+        modelAndView.addObject("needContainer",
+            request.getHeader("x-requested-with") == null && request.getParameter("x-requested-with") == null);
+      } catch (UnautherizedException e) {
+
+      }
       reMapView((HandlerMethod) handler, modelAndView);
     }
   }

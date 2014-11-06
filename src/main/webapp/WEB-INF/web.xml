@@ -20,6 +20,12 @@
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
 
+	<listener>
+		<listener-class>    
+			org.springframework.web.context.request.RequestContextListener    
+		</listener-class>    
+	</listener>    
+
     <!-- Filter 定义 -->
     <!-- Character Encoding Filter -->
     <filter>

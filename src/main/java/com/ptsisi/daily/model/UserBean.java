@@ -1,20 +1,31 @@
 package com.ptsisi.daily.model;
 
-import com.google.common.collect.Sets;
-import com.ptsisi.common.entity.pojo.IntegerIdTimeObject;
-import com.ptsisi.daily.Resource;
-import com.ptsisi.daily.Role;
-import com.ptsisi.daily.User;
+import java.sql.Blob;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import java.sql.Blob;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Sets;
+import com.ptsisi.common.entity.pojo.IntegerIdTimeObject;
+import com.ptsisi.common.serializer.BooleanSerializer;
+import com.ptsisi.daily.Resource;
+import com.ptsisi.daily.Role;
+import com.ptsisi.daily.User;
 
 @Entity(name = "com.ptsisi.daily.User")
 @Table(name = "SYS_USERS")
@@ -28,21 +39,28 @@ public class UserBean extends IntegerIdTimeObject implements User {
   private String username;
 
   @NotBlank
+  @JsonIgnore
   private String salt;
 
   @NotBlank
   @Length(max = 100)
+  @JsonIgnore
   private String password;
+  
   @NotBlank
   @Length(max = 100)
   private String fullName;
+
   @Email
   @Length(max = 50)
   @NotNull
   private String email;
+  
   @Lob
+  @JsonIgnore
   private Blob portrait;
 
+  @JsonSerialize(using = BooleanSerializer.class)
   private boolean enabled = true;
 
   @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
@@ -129,6 +147,7 @@ public class UserBean extends IntegerIdTimeObject implements User {
     this.roles = roles;
   }
 
+  @JsonIgnore
   public Set<Resource> getResources() {
     Set<Resource> resources = Sets.newHashSet();
     for (Role role : this.roles) {

@@ -1,16 +1,23 @@
 package com.ptsisi.daily.model;
 
-import com.google.common.collect.Sets;
-import com.ptsisi.common.entity.pojo.IntegerIdHierarchyObject;
-import com.ptsisi.daily.Menu;
-import com.ptsisi.daily.Resource;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
-
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Sets;
+import com.ptsisi.common.entity.pojo.IntegerIdHierarchyObject;
+import com.ptsisi.daily.Menu;
+import com.ptsisi.daily.Resource;
 
 /**
  * Created by zhaoding on 14-10-28.
@@ -27,6 +34,7 @@ public class MenuBean extends IntegerIdHierarchyObject<Menu> implements Menu {
 
   private String entry;
 
+  @JsonIgnore
   @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
   @JoinTable(name = "SYS_MENUS_RESOURCES", joinColumns = { @JoinColumn(name = "MENU_ID", updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "RESOURCE_ID", updatable = false) })
   private Set<Resource> resources = Sets.newHashSet();

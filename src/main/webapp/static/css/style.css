@@ -5,11 +5,11 @@ body {
 	background-repeat:no-repeat;
 }
 */
-
-.main-container{
-	margin-left:5%;
-	margin-right:5%;
+.main-container {
+	margin-left: 5%;
+	margin-right: 5%;
 }
+
 .text {
 	height: 50px;
 	line-height: 1.5cm !important;
@@ -54,6 +54,11 @@ body {
 		rgba(0, 0, 0, 0.8);
 }
 
+.bs-docs-nav {
+	filter: alpha(opacity = 90);
+	opacity: .9;
+}
+
 .pictrue {
 	margin: 0 auto 5px;
 	width: 90px;
@@ -68,3 +73,8 @@ body {
 .server-exception h1 {
 	font-size: 100px;
 }
+
+.wrapper {
+	margin-top: 80px;
+}
+

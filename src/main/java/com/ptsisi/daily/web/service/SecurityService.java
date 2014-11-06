@@ -21,4 +21,6 @@ public interface SecurityService {
   public void saveOrUpdateResource(Resource resource);
 
   public void removeResources(Collection<Resource> resources);
+
+  public List<Menu> getMenus();
 }

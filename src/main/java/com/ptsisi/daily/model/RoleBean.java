@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Sets;
 import com.ptsisi.common.entity.pojo.IntegerIdObject;
 import com.ptsisi.daily.Resource;
@@ -63,6 +64,7 @@ public class RoleBean extends IntegerIdObject implements Role {
   }
 
   @Override
+  @JsonIgnore
   public Set<User> getUsers() {
     return users;
   }
@@ -73,6 +75,7 @@ public class RoleBean extends IntegerIdObject implements Role {
   }
 
   @Override
+  @JsonIgnore
   public Set<Resource> getResources() {
     return resources;
   }

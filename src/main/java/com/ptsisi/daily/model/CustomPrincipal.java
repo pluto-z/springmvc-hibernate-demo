@@ -1,13 +1,17 @@
 package com.ptsisi.daily.model;
 
+import java.io.Serializable;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import com.ptsisi.daily.User;
 import com.ptsisi.security.UnautherizedException;
 
-public class CustomPrincipal {
+public class CustomPrincipal implements Serializable{
 
+  private static final long serialVersionUID = 3351083330103155186L;
+  
   private User user;
 
   public CustomPrincipal(User user) {

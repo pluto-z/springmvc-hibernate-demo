@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ptsisi.common.TimeEntity;
 
 @MappedSuperclass
@@ -15,10 +16,12 @@ public abstract class IntegerIdTimeObject extends IntegerIdObject implements Tim
 
   @NotNull
   @Column(name = "created_at", nullable = false)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm")  
   private Date createdAt;
 
   @NotNull
   @Column(name = "updated_at", nullable = false)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm")  
   private Date updatedAt;
 
   public Date getCreatedAt() {

@@ -1,5 +1,21 @@
 package com.ptsisi.security;
 
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ptsisi.common.exception.ServiceException;
@@ -11,27 +27,15 @@ import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.daily.web.service.UserService;
 import com.ptsisi.security.utils.PasswordUtil;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.Set;
-
 /**
  * Created by zhaoding on 14-10-27.
  */
 public class DefaultRealm extends AuthorizingRealm {
 
-  @Autowired
+  @javax.annotation.Resource
   protected UserService userService;
 
-  @Autowired
+  @javax.annotation.Resource
   protected SecurityService securityService;
 
   protected List<String> defaultPermissions = Lists.newArrayList();

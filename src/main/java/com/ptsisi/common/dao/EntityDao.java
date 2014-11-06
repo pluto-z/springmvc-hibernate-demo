@@ -35,7 +35,9 @@ public interface EntityDao {
 
   <T> List<T> get(String entityName, String keyName, Object... values);
 
-  <T> List<T> search(Query<T> query);
+  <T> Object search(Query<T> query);
+
+  <T> Object searchObj(QueryBuilder<T> builder);
 
   <T> List<T> search(QueryBuilder<T> builder);
 

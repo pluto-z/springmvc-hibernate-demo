@@ -3,10 +3,10 @@ package com.ptsisi.hibernate;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import com.ptsisi.common.metadata.impl.DefaultModelMeta;
 @Component
 public class HibernateModelMeta extends DefaultModelMeta implements ApplicationContextAware {
 
-  @Autowired
+  @Resource
   ApplicationContext context;
 
   @PostConstruct

@@ -14,21 +14,25 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.ptsisi.common.BaseServiceImpl;
 import com.ptsisi.common.query.builder.OqlBuilder;
 import com.ptsisi.daily.Menu;
 import com.ptsisi.daily.Resource;
-import com.ptsisi.daily.Role;
-import com.ptsisi.daily.User;
+import com.ptsisi.daily.model.CustomPrincipal;
 import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.daily.web.utils.HierarchyEntityUtils;
 
 @Service
 public class SecurityServiceImpl extends BaseServiceImpl implements SecurityService {
 
+  @Cacheable(value = "app")
+  public List<Menu> getMenus(){
+    CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
+    Set<Resource> resources = principal.getUser().getResources();
+    return getMenus(resources);
+  }
+  
   @SuppressWarnings("unchecked")
-  @Override
   @Cacheable(value = "app")
   public List<Menu> getMenus(Collection<Resource> resources) {
     if (resources.isEmpty()) return Lists.newArrayList();
@@ -47,36 +51,31 @@ public class SecurityServiceImpl extends BaseServiceImpl implements SecurityServ
     return menuList;
   }
 
-  @Override
   @Cacheable(value = "app")
   public Menu getMenu(Integer id) {
     return entityDao.get(Menu.class, id);
   }
 
-  @Override
   @CachePut(value = "app")
   public void saveOrUpdateMenu(Menu menu) {
     entityDao.saveOrUpdate(menu);
   }
 
-  @Override
   @CacheEvict(value = "app")
   public void removeMenus(Collection<Menu> menus) {
     entityDao.remove(menus);
   }
 
-  @Override
+  @Cacheable(value = "app")
   public List<Resource> getResources() {
     return entityDao.getAll(Resource.class);
   }
 
-  @Override
   @CachePut(value = "app")
   public void saveOrUpdateResource(Resource resource) {
     entityDao.saveOrUpdate(resource);
   }
 
-  @Override
   @CacheEvict(value = "app")
   public void removeResources(Collection<Resource> resources) {
     entityDao.remove(resources);

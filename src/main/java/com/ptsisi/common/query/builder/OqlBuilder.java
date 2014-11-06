@@ -1,5 +1,6 @@
 package com.ptsisi.common.query.builder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
+import com.google.common.collect.Lists;
 import com.ptsisi.common.collection.Order;
 import com.ptsisi.common.collection.page.PageLimit;
 import com.ptsisi.common.entity.util.EntityUtils;
@@ -149,6 +151,10 @@ public class OqlBuilder<T> extends AbstractQueryBuilder<T> {
 
   public OqlBuilder<T> orderBy(final String orderBy) {
     return orderBy(Order.parse(orderBy));
+  }
+
+  public OqlBuilder<T> orderBy(final String sort, final String orderStr) {
+    return orderBy(Lists.newArrayList(Order.parse(sort, orderStr)));
   }
 
   public OqlBuilder<T> orderBy(final int index, final String orderBy) {

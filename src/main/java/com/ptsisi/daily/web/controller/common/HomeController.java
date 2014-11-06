@@ -1,18 +1,11 @@
 package com.ptsisi.daily.web.controller.common;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.ptsisi.daily.Menu;
-import com.ptsisi.daily.Resource;
-import com.ptsisi.daily.model.CustomPrincipal;
 import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.daily.web.service.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by zhaoding on 14-10-28.
@@ -20,18 +13,20 @@ import com.ptsisi.daily.web.service.UserService;
 @Controller
 public class HomeController {
 
-  @Autowired
-  protected SecurityService securityService;
+	@javax.annotation.Resource
+	protected SecurityService securityService;
 
-  @Autowired
-  protected UserService userService;
+	@javax.annotation.Resource
+	protected UserService userService;
 
-  @RequestMapping("home")
-  public void index(Model model) {
-    CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
-    Set<Resource> resources = principal.getUser().getResources();
-    List<Menu> menus = securityService.getMenus(resources);
-    model.addAttribute("menus", menus);
-    model.addAttribute("user", principal.getUser());
-  }
+	@RequestMapping("home")
+	public void index() {
+	}
+
+	@RequestMapping("homeList")
+	public void list(String id, ModelMap model) {
+		if (StringUtils.isNotBlank(id)) {
+			model.put("id", id);
+		}
+	}
 }
