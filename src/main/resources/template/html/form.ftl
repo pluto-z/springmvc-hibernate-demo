@@ -1,5 +1,5 @@
 [#ftl]
-<form id="${tag.id}" name="${tag.name}" action="${tag.action}" method="post" [#if tag.target??]target="${tag.target}"[/#if]${tag.parameterString}>
+<form role="form" id="${tag.id}" name="${tag.name}" action="${tag.action}" method="post" [#if tag.target??]target="${tag.target}"[/#if]${tag.parameterString}>
 [#if RequestParameters['_params']??]<input name="_params" type="hidden" value="${RequestParameters['_params']?html}" />[/#if]
 ${tag.body}
 </form>

@@ -13,8 +13,9 @@ import com.ptsisi.common.collection.page.PageLimit;
 import com.ptsisi.common.dao.EntityDao;
 import com.ptsisi.common.entity.util.EntityUtils;
 import com.ptsisi.common.query.builder.OqlBuilder;
+import org.springframework.web.servlet.mvc.LastModified;
 
-public abstract class AbstractController {
+public abstract class AbstractController implements LastModified{
 
   @Resource
   protected EntityDao entityDao;
@@ -75,5 +76,10 @@ public abstract class AbstractController {
     }
     OqlBuilder<T> builder = getQueryBuilder();
     return builder.orderBy(orderBy).limit(pageLimit);
+  }
+
+  @Override public long getLastModified(HttpServletRequest request) {
+
+    return 0;
   }
 }

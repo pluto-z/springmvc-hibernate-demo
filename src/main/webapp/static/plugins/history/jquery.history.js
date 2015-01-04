@@ -3317,51 +3317,69 @@ if (typeof JSON !== 'object') {
     History.backwardStack = JSON.parse(sessionStorage.getItem("History.backward")) || [];
     History.forwardStack = JSON.parse(sessionStorage.getItem("History.forward")) || [];
     var prevState = null;
+    History.rootState = null;
     var _oldPushState = History.pushState;
     var _oldReplaceState = History.replaceState;
 
     History.pushState = function (data, title, url, queue, mockpopstate) {
         _oldPushState(data, title, url, queue, mockpopstate);
         if (mockpopstate != true) {
-            prevState = History.getState();
+            prevState = this.getState();
         }
-        History.backwardStack.push(History.getState().id);
+        this.backwardStack.push(this.getState().id);
+        this.forwardStack = [];
+        this.syncStacks();
     };
 
     History.setPrevState = function (state) {
         prevState = state;
-    }
+    };
+    History.setRootState = function (state) {
+        if (History.backwardStack.length == 0) {
+            state = state || History.getState();
+            sessionStorage.setItem("History.rootState", state.id);
+        }
+    };
+    History.getRootStateId = function () {
+        return sessionStorage.getItem("History.rootState");
+    };
     History.replaceState = function (data, title, url, queue) {
         _oldReplaceState(data, title, url, queue);
-        prevState = History.getState();
+        prevState = this.getState();
+    };
+    History.syncStacks = function () {
+        sessionStorage.setItem("History.backward", JSON.stringify(this.backwardStack));
+        sessionStorage.setItem("History.forward", JSON.stringify(this.forwardStack));
     };
 
     History.Adapter.bind(window, 'popstate', function (event) {
-        var _prevState = prevState;
-        if (_prevState == null) {
+        if (prevState == null) {
             return;
         }
-        var currentState = prevState = History.getState();
-        var backward = true;
-        var event;
-        var idx = $.inArray(currentState.id, History.forwardStack);
+        var _prevState = prevState,
+            currentState = prevState = History.getState(),
+            jump,
+            stack,
+            idx = $.inArray(currentState.id, History.forwardStack);
         if (idx > -1) {
-            var arr = History.forwardStack.splice(idx, History.forwardStack.length - idx)
-            for (var key in arr) {
-                History.backwardStack.push(arr[key]);
+            jump = History.forwardStack.length - idx - 1;
+            for (var i = 0; i <= jump; i++) {
+                History.backwardStack.push(History.forwardStack.pop());
             }
             event = 'navigation-forward';
         } else {
             idx = $.inArray(_prevState.id, History.backwardStack);
-            var arr = History.backwardStack.splice(idx, History.backwardStack.length - idx);
-            for (var key in arr) {
-                History.forwardStack.push(arr[key]);
+            if (idx == -1) {
+                return false;
+            }
+            var curIdx = $.inArray(currentState.id, History.backwardStack);
+            jump = Math.abs(idx - curIdx);
+            for (var i = 0; i < jump; i++) {
+                History.forwardStack.push(History.backwardStack.pop());
             }
             event = 'navigation-backward';
         }
-        sessionStorage.setItem("History.backward", JSON.stringify(History.backwardStack));
-        sessionStorage.setItem("History.forward", JSON.stringify(History.forwardStack));
-        console.log("back:" + History.backwardStack + ";forward:" + History.forwardStack);
-        History.Adapter.trigger(window, event, [_prevState, currentState])
+        History.syncStacks();
+        History.Adapter.trigger(window, event, currentState);
     });
 })(window);

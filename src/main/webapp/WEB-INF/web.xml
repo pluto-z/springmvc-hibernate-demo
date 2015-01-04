@@ -21,10 +21,10 @@
     </listener>
 
 	<listener>
-		<listener-class>    
-			org.springframework.web.context.request.RequestContextListener    
-		</listener-class>    
-	</listener>    
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>
 
     <!-- Filter 定义 -->
     <!-- Character Encoding Filter -->
@@ -107,6 +107,6 @@
 
     <error-page>
         <exception-type>org.apache.shiro.authz.UnauthorizedException</exception-type>
-        <location>/exception/unauthorized.ftl</location>
+        <location>/pages/exception/unauthorized.ftl</location>
     </error-page>
 </web-app>

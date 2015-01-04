@@ -23,7 +23,7 @@
     	<div class="navbar-collapse collapse">
     		<ul class="nav navbar-nav">
 	    		<li data-func='nav'><a href="javascript:void(0);" data-target="#contentDiv" data-href="${base}/home">首页</a></li>
-				[#list menus as m]
+				[#list default_menus as m]
 	    			[#if !m.parent??]
 	            <li class="dropdown" data-active="${m.id}">
 	                <a id="${m.id}" href="javascript:void(0);" class="dropdown-toggle no-padding" data-toggle="dropdown">
@@ -40,7 +40,7 @@
             	<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             		<img class="img-circle user-portrait" src="${base}/security/user/get-portrait" onerror="this.src='${base}/static/images/empty.jpg';">
                     	<span class="hidden-xs" id="info-nickname">
-                            欢迎, ${user.fullName!user.username}
+                            欢迎, ${default_user.fullName!default_user.username}
                     	</span>
                 		<b class="caret hidden-xs"></b>
                 </a>

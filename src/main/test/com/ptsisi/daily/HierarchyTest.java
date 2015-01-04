@@ -1,6 +1,6 @@
-package com.ptsisi.daily.model;
+package com.ptsisi.daily;
 
-import com.ptsisi.daily.Menu;
+import com.ptsisi.daily.model.MenuBean;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

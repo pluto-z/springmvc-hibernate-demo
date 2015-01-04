@@ -31,7 +31,7 @@ public class SecurityServiceImpl extends BaseServiceImpl implements SecurityServ
     Set<Resource> resources = principal.getUser().getResources();
     return getMenus(resources);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Cacheable(value = "app")
   public List<Menu> getMenus(Collection<Resource> resources) {

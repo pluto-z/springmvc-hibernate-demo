@@ -47,7 +47,7 @@
         bar: {
             baseHref: null,
             $el: null,
-            addMethod: 'add',
+            addMethod: 'edit',
             updateMethod: 'edit',
             deleteMethod: 'delete',
             retrieveMethod: 'info',
@@ -112,6 +112,63 @@
             return this.bar;
         },
         history: {
+            recursiveStateWithHolder: function (state, stack, _stack) {
+                _stack.unshift(state.id);
+                if ($(state.data.holder).length > 0) {
+                    return _stack;
+                } else {
+                    var idx = $.inArray(state.id, stack);
+                    if (idx < 0) {
+                        return [];
+                    } else if (idx == 0) {
+                        _stack.unshift(History.getRootStateId());
+                        return _stack;
+                    }
+                    return d.history.recursiveStateWithHolder(History.getStateById(stack[idx - 1]), stack, _stack);
+                }
+            },
+            navigationHandler: function (event, state) {
+                var $container = $(state.data.holder),
+                    url = state.url,
+                    params = state.data.params || {};
+                if ($container.length > 0) {
+                    $.ajax({
+                        url: url,
+                        cache: false,
+                        async: false,
+                        type: "POST",
+                        dataType: "html",
+                        data: params,
+                        complete: function (jqXHR) {
+                            $container.html(jqXHR.responseText);
+                        }
+                    }).complete(function () {
+                        jQuery(window).trigger("daily.statechange");
+                    })
+                } else {
+                    if (History.backwardStack.length == 0) {
+                        window.location.reload();
+                    } else {
+                        _stack = d.history.recursiveStateWithHolder(state, History.backwardStack, []);
+                        for (var i = 0; i < _stack.length; i++) {
+                            var _state = History.getStateById(_stack[i]);
+                            $.ajax({
+                                url: _state.url,
+                                cache: false,
+                                async: false,
+                                type: _state.data.type,
+                                dataType: "html",
+                                data: _state.data.params,
+                                complete: function (jqXHR) {
+                                    $(_state.data.holder).html(jqXHR.responseText);
+                                }
+                            }).complete(function () {
+                                if (i == 0) jQuery(window).trigger("daily.statechange", _state.url);
+                            })
+                        }
+                    }
+                }
+            },
             init: function () {
                 if (document.location.protocol === 'file:'
                     || typeof History == "undefined"
@@ -119,35 +176,26 @@
                     bootbox.alert('Not Support Ajax History');
                     return;
                 }
-                //History.Adapter.bind(window, "statechange", navigationHandler);
                 if (History.backwardStack.length == 0 && History.forwardStack.length == 0) {
                     History.replaceState({
-                            container: "body",
+                            holder: "#contentDiv",
                             params: {},
-                            prev: null,
-                            url: History.getLocationHref()
+                            type: "GET",
+                            time: new Date().getTime()
                         }, "", History.getLocationHref()
                     );
+                    History.setRootState();
                 } else {
                     if (History.backwardStack.length == 0) {
-                        History.setPrevState(History.getStateById(History.forwardStack[History.forwardStack.length - 1]));
+                        History.setPrevState(History.getStateById(History.forwardStack.slice(-1)));
                     } else {
-                        History.setPrevState(History.getStateById(History.backwardStack[0]));
+                        History.setPrevState(History.getStateById(History.backwardStack.slice(-1)));
                     }
                 }
-
-                navigationHandler = function (event, prevState, currentState) {
-                    console.log(event, prevState.id, currentState.id);
-                };
-                History.Adapter.bind(window, "navigation-forward", navigationHandler);
-                History.Adapter.bind(window, "navigation-backward", navigationHandler);
+                History.Adapter.bind(window, "navigation-forward", d.history.navigationHandler);
+                History.Adapter.bind(window, "navigation-backward", d.history.navigationHandler);
             }
         },
-        getParent: function (obj, selector) {
-            var parent = typeof selector === 'undefined' ? obj.parent() : obj.parent(selector);
-            return parent.length == 0 ? obj : this.getParent(parent, selector);
-        }
-        ,
         go: function (url, target, params, callback) {
             var self = this;
             params = params || {};
@@ -169,27 +217,28 @@
                         url: url,
                         cache: false,
                         async: false,
-                        type: "POST",
+                        type: "GET",
                         dataType: "html",
                         data: params,
                         complete: function (jqXHR) {
                             $(target).html(jqXHR.responseText);
-                        }
-                    }).complete(function () {
-                            if (typeof callback != 'undefined')callback.call();
+                            var redirect_url = jqXHR.getResponseHeader("daily_redirect");
+                            if (redirect_url) {
+                                url = redirect_url;
+                                var redirect_param = jqXHR.getResponseHeader("params") || "{}";
+                                params = $.parseJSON(redirect_param);
+                            }
                             History.pushState({
-                                container: target,
+                                holder: target,
                                 params: params,
-                                prev: History.getLastSavedState().id,
-                                url: url
+                                type: "GET",
+                                time: new Date().getTime()
                             }, "", url);
+                            if (typeof callback != 'undefined') callback.call();
                         }
-                    )
-                    ;
+                    });
             }
-        }
-        ,
-        require: function (files, callBack, basePath) {
+        }, require: function (files, callBack, basePath) {
             var self = this, successFunction, path;
             successFunction = callBack || function () {
             };
@@ -216,10 +265,7 @@
                     async: false
                 });
             });
-        }
-
-        ,
-        requireCss: function (cssFile, basePath) {
+        }, requireCss: function (cssFile, basePath) {
             var self = this
             if (!self.styleCache[cssFile]) {
                 var path, cssref;
@@ -234,9 +280,7 @@
                 $css.appendTo($("head"));
                 self.styleCache[cssFile] = true;
             }
-        }
-        ,
-        load: function (module, callback) {
+        }, load: function (module, callback) {
             var self = this;
             switch (module) {
                 case "menu":
@@ -296,12 +340,31 @@
             }
         }
     }
-
     if (!d.contextPath) {
         window._ = d.init();
     }
-}
-(jQuery, undefined);
+    $(function () {
+        if (History.backwardStack.length > 0) {
+            var _stack = d.history.recursiveStateWithHolder(History.getStateById(History.backwardStack.slice(-1)), History.backwardStack, []);
+            for (var i = 0; i < _stack.length; i++) {
+                var _state = History.getStateById(_stack[i]);
+                $.ajax({
+                    url: _state.url,
+                    cache: false,
+                    async: false,
+                    type: "POST",
+                    dataType: "html",
+                    data: _state.data.params,
+                    complete: function (jqXHR) {
+                        $(_state.data.holder).html(jqXHR.responseText);
+                    }
+                }).complete(function () {
+                    if (i == 0) jQuery(window).trigger("daily.statechange", _state.url);
+                })
+            }
+        }
+    })
+}(jQuery, undefined);
 
 !function () {
     var $ready = jQuery.prototype.ready;
