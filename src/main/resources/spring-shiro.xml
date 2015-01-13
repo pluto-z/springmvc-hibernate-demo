@@ -12,41 +12,29 @@
     <!-- 自定义shiro的realm数据库身份验证 -->
     <bean id="defaultRealm"
           class="com.ptsisi.security.DefaultRealm" p:authorizationCacheName="shiroAuthorizationCache"
-          p:authenticationCacheName="shiroAuthorizationCache"
+          p:authenticationCacheName="shiroAuthenticationCache"
           p:name="Default Realm" p:credentialsMatcher-ref="hashedCredentialsMatcher"
           p:authenticationCachingEnabled="true"/>
 
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"
-          p:cacheManager-ref="ehCacheManagerFactory"/>
-
-    <!-- 使用EnterpriseCacheSessionDAO，将session放入到缓存，通过同步配置，将缓存同步到其他集群点上，解决session同步问题。 -->
-    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-        <!-- 活动session缓存名称 -->
-        <property name="activeSessionsCacheName" value="shiroActiveSessionCache"/>
-    </bean>
-
-    <!-- 考虑到集群，使用DefaultWebSessionManager来做sessionManager -->
-    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <!-- 使用EnterpriseCacheSessionDAO，解决session同步问题 -->
-        <property name="sessionDAO" ref="sessionDAO"/>
-    </bean>
+          p:cacheManagerConfigFile="classpath:ehcache-shiro.xml"/>
 
     <!--默认cookie记录一年，所以用配置更改为30天-->
     <bean id="rememberCookie" class="org.apache.shiro.web.servlet.SimpleCookie" p:maxAge="2592000" p:httpOnly="true">
         <constructor-arg name="name" value="daily-remember-cookie"/>
     </bean>
+
     <bean id="cookieRememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager"
           p:cookie-ref="rememberCookie"/>
     <!-- 使用默认的WebSecurityManager -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager"
-          p:realm-ref="defaultRealm" p:cacheManager-ref="cacheManager" p:sessionManager-ref="sessionManager"
+          p:realm-ref="defaultRealm" p:cacheManager-ref="cacheManager"
           p:rememberMeManager-ref="cookieRememberMeManager"/>
 
     <bean id="filterChainDefinitionMap" class="com.ptsisi.security.SimpleDefinitionSectionMetaSource">
         <!-- 默认的连接配置 -->
         <property name="filterChainDefinitions">
             <value>
-                /=anon
                 /login=captchaAuthc
                 /register=anon
                 /get-captcha=anon
@@ -66,6 +54,7 @@
             </map>
         </property>
     </bean>
+
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"

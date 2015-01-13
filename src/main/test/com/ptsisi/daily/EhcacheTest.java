@@ -1,6 +1,6 @@
 package com.ptsisi.daily;
 
-import com.ptsisi.daily.model.UserBean;
+import com.ptsisi.daily.model.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.cache.Cache;
@@ -22,7 +22,7 @@ public class EhcacheTest {
 		cacheCacheManager.setCacheManager(ehcacheManager);
 
 		Integer id = 1;
-		User user = new UserBean();
+		User user = new User();
 		user.setId(id);
 		user.setFullName("aaa");
 		user.setEmail("aaa@gmail.com");

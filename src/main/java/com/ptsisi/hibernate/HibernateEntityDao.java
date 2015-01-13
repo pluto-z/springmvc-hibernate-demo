@@ -1,38 +1,5 @@
 package com.ptsisi.hibernate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.collection.spi.PersistentCollection;
-import org.hibernate.engine.jdbc.StreamUtils;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate4.SessionHolder;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.util.Assert;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ptsisi.common.Entity;
@@ -48,6 +15,25 @@ import com.ptsisi.common.query.LimitQuery;
 import com.ptsisi.common.query.QueryBuilder;
 import com.ptsisi.common.query.builder.Condition;
 import com.ptsisi.common.query.builder.OqlBuilder;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.*;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.hibernate.engine.jdbc.StreamUtils;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.util.*;
 
 @Repository
 public class HibernateEntityDao implements EntityDao {
@@ -61,8 +47,7 @@ public class HibernateEntityDao implements EntityDao {
   protected ModelMeta modelMeta;
 
   protected Session getSession() {
-    SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
-    return null != holder ? holder.getSession() : null;
+    return sessionFactory.getCurrentSession();
   }
 
   @SuppressWarnings({ "unchecked" })
@@ -196,7 +181,6 @@ public class HibernateEntityDao implements EntityDao {
    * 依据自构造的查询语句进行查询
    * 
    * @see #buildCountQueryStr(Query)
-   * @see org.beangle.commons.collection.page.Page
    */
   public <T> List<T> search(com.ptsisi.common.query.Query<T> query) {
     if (query instanceof LimitQuery) {

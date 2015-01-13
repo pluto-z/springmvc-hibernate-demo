@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache>
-
-    <diskStore path="java.io.tmpdir"/>
+<ehcache name="daily">
+    <diskStore path="java.io.tmpdir/daily"/>
 
     <defaultCache
             maxEntriesLocalHeap="1000"
@@ -11,10 +10,12 @@
             overflowToDisk="false"/>
 
     <cache name="app"
-           maxElementsOnDisk="20000"
-           maxElementsInMemory="2000"
-           eternal="true"
-           overflowToDisk="true"
-           diskPersistent="true"/>
+           maxElementsOnDisk="500"
+           maxElementsInMemory="100"
+           eternal="false"
+           timeToIdleSeconds="120"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false"
+           diskPersistent="false"/>
 
 </ehcache>

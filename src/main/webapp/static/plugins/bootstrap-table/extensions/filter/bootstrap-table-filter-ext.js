@@ -17,7 +17,6 @@
 
     BootstrapTable.prototype.init = function () {
         _init.apply(this, Array.prototype.slice.apply(arguments));
-
         var that = this;
         this.$el.on('load-success.bs.table', function () {
             if (that.options.showFilter) {

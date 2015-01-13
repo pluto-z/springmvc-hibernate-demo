@@ -9,25 +9,14 @@
         }
     }
 
-
     $(function () {
         _.requireCss("css/style.css");
-        jQuery(window).unbind("daily.statechange").bind("daily.statechange", function (event, url) {
+        $(window).unbind("daily.statechange").bind("daily.statechange", function (event, url) {
                 url = url || History.getLocationHref();
                 if (url.indexOf('?') > -1) url = url.substr(0, url.indexOf('?'));
                 addMenuClass($("[data-href='" + History.getShortUrl(url) + "']").parent());
             }
         );
-        jQuery(window).trigger("daily.statechange");
-        $("[data-func='nav']").delegate(
-            "a",
-            "click",
-            function () {
-                var $src = $(this);
-                _.go($src.attr("data-href"), $src.attr(
-                    "data-target"), null, function () {
-                    jQuery(window).trigger("daily.statechange");
-                });
-            })
+        $(window).trigger("daily.statechange");
     })
 }(jQuery, window)

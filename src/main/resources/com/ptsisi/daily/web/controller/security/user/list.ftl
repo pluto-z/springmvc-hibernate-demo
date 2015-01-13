@@ -1,4 +1,5 @@
 [#macro body]
+    [@d.flash/]
     [@d.grid url="json" filterable=true selectItemName="user.id" showAll=true maintainSelected=true]
         [@d.toolbar]
         bar.addCreate();
@@ -20,7 +21,7 @@
             [@d.col field="email" title="邮箱"/]
             [@d.col field="roles" title="角色" formatter="roleFormatter" sortable=false/]
             [@d.col field="updatedAt" title="更新时间"/]
-            [@d.col field="enabled" title="状态"/]
+            [@d.col field="enabled" title="是否启用"/]
         [/@]
     [/@]
 [/#macro]

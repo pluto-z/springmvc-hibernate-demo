@@ -9,6 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import com.google.common.collect.Lists;
@@ -27,6 +28,7 @@ public class IntegerIdHierarchyObject<T> extends IntegerIdObject implements Comp
 
   @NaturalId
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
   private T parent;
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)

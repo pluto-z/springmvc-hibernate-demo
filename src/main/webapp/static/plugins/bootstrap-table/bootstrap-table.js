@@ -1262,7 +1262,6 @@
             type: this.options.method,
             url: this.options.url,
             data: data,
-            async: false,
             cache: this.options.cache,
             contentType: this.options.contentType,
             dataType: this.options.dataType,

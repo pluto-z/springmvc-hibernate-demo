@@ -1,11 +1,9 @@
 package com.ptsisi.router;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
-import com.ptsisi.daily.Menu;
-import com.ptsisi.daily.Resource;
 import com.ptsisi.daily.model.CustomPrincipal;
-import com.ptsisi.daily.web.service.SecurityService;
 import com.ptsisi.security.UnautherizedException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,9 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class DefaultViewMapperInterceptor implements HandlerInterceptor {
 
@@ -27,9 +23,6 @@ public class DefaultViewMapperInterceptor implements HandlerInterceptor {
 
 	final static String DAILY_REDIRECT = "daily_redirect";
 
-	@javax.annotation.Resource
-	private SecurityService securityService;
-
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		return true;
@@ -38,43 +31,46 @@ public class DefaultViewMapperInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		if (response.getStatus() == 404 || response.getStatus() == 500) {
+			request.setAttribute("ex_head",
+					request.getHeader("x-requested-with") == null && request.getParameter("x-requested-with") == null);
+		}
 		if (modelAndView != null) {
 			try {
-				CustomPrincipal principal = CustomPrincipal.getCurrentPrincipal();
-				Set<Resource> resources = principal.getUser().getResources();
-				List<Menu> menus = securityService.getMenus(resources);
-				boolean need_container =
-						request.getHeader("x-requested-with") == null && request.getParameter("x-requested-with") == null;
-				if (need_container) {
-					modelAndView.addObject("default_menus", menus);
-					modelAndView.addObject("default_user", principal.getUser());
-				}
+				CustomPrincipal.getCurrentPrincipal();
 			} catch (UnautherizedException e) {
 				modelAndView.addObject("login", true);
 			}
+			modelAndView.addObject("need_container",
+					request.getHeader("x-requested-with") == null && request.getParameter("x-requested-with") == null);
 			reMapView((HandlerMethod) handler, modelAndView);
 			if (modelAndView.getViewName().startsWith("redirect:")) {
 				modelAndView.addObject(DAILY_REDIRECT, 1);
 			}
 			if (null != request.getParameter(DAILY_REDIRECT)) {
+				processRequestParams(request, response);
 				StringBuffer requestUrl = request.getRequestURL();
-				String queryString = request.getQueryString();
-				if (StringUtils.isNotBlank(queryString)) {
-					String[] queryStrings = StringUtils.split(queryString, '&');
-					if (ArrayUtils.isNotEmpty(queryStrings)) {
-						Map<String, String> params = Maps.newHashMap();
-						for (String param : queryStrings) {
-							String[] paramArray = StringUtils.split(param, '=');
-							if (!"x-requested-with".equals(paramArray[0]) && !DAILY_REDIRECT.equals(paramArray[0])) {
-								params.put(paramArray[0], paramArray[1]);
-							}
-						}
-						if (!params.isEmpty()) {
-							response.setHeader("params", new ObjectMapper().writeValueAsString(params));
-						}
+				response.setHeader(DAILY_REDIRECT, requestUrl.toString());
+			}
+		}
+	}
+
+	private void processRequestParams(HttpServletRequest request, HttpServletResponse response)
+			throws JsonProcessingException {
+		String queryString = request.getQueryString();
+		if (StringUtils.isNotBlank(queryString)) {
+			String[] queryStrings = StringUtils.split(queryString, '&');
+			if (ArrayUtils.isNotEmpty(queryStrings)) {
+				Map<String, String> params = Maps.newHashMap();
+				for (String param : queryStrings) {
+					String[] paramArray = StringUtils.split(param, '=');
+					if (!"x-requested-with".equals(paramArray[0]) && !DAILY_REDIRECT.equals(paramArray[0])) {
+						params.put(paramArray[0], paramArray[1]);
 					}
 				}
-				response.setHeader(DAILY_REDIRECT, requestUrl.toString());
+				if (!params.isEmpty()) {
+					response.setHeader("params", new ObjectMapper().writeValueAsString(params));
+				}
 			}
 		}
 	}

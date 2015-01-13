@@ -1,80 +1,198 @@
-/*
-body {
-	background-image: url("../images/bg.jpg");
-	background-size:cover;
-	background-repeat:no-repeat;
-}
-*/
 .main-container {
-	margin-left: 5%;
-	margin-right: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 .text {
-	height: 50px;
-	line-height: 1.5cm !important;
-	margin-right: 20px;
+    height: 50px;
+    line-height: 1.5cm !important;
+    margin-right: 20px;
 }
 
 .info-date {
-	margin-left: -15px;
-	font-size: 15px;
+    margin-left: -15px;
+    font-size: 15px;
 }
 
 .navbar-xs {
-	margin-left: 20px;
-	font-size: 24px;
-	margin-top: 10px;
-	color: #AAAAAA;
+    margin-left: 20px;
+    font-size: 24px;
+    margin-top: 10px;
+    color: #AAAAAA;
 }
 
 .login-container {
-	margin: 0 auto;
-	padding: 7% 0;
-	max-width: 400px;
+    margin: 0 auto;
+    padding: 7% 0;
+    max-width: 400px;
 }
 
 .user-portrait {
-	border: 2px solid rgba(20, 20, 20, 0.3);
-	float: left;
-	height: 40px;
-	width: 40px;
-	margin-right: 5px;
-	margin-top: -10px;
+    border: 2px solid rgba(20, 20, 20, 0.3);
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin-right: 5px;
+    margin-top: -10px;
 }
 
 .user-portrait-xs {
-	margin-right: 20px;
-	margin-top: 5px;
+    margin-right: 20px;
+    margin-top: 5px;
 }
 
 .border-black {
-	border-color: #323232;
-	box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.35), 0 0 6px
-		rgba(0, 0, 0, 0.8);
+    border-color: #323232;
+    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.35), 0 0 6px rgba(0, 0, 0, 0.8);
 }
 
 .bs-docs-nav {
-	filter: alpha(opacity = 90);
-	opacity: .9;
+    filter: alpha(opacity=90);
+    opacity: .9;
 }
 
 .pictrue {
-	margin: 0 auto 5px;
-	width: 90px;
+    margin: 0 auto 5px;
+    width: 90px;
 }
 
 .server-exception {
-	padding: 20px;
-	width: 500px;
-	margin: 0 auto;
+    padding: 20px;
+    width: 500px;
+    margin: 0 auto;
+    position: absolute;
 }
 
 .server-exception h1 {
-	font-size: 100px;
+    font-size: 100px;
 }
 
 .wrapper {
-	margin-top: 80px;
+    margin-top: 80px;
+}
+
+.tn-box {
+    line-height: 1.4;
+    max-width: 200px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: default;
+    background: #000;
+    border: 1px solid #000;
+    display: none;
+    font-size: 14px;
+    padding: 3px 8px;
+    color: #fff;
+    font-weight: bolder;
+}
+
+.tn-box.tn-fadeout {
+    display: block;
+    -webkit-animation: fadeOut 5s linear forwards;
+    -o-animation: fadeOut 5s linear forwards;
+    -moz-animation: fadeOut 5s linear forwards;
+    -ms-animation: fadeOut 5s linear forwards;
+    animation: fadeOut 5s linear forwards;
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    99% {
+        opacity: 0;
+        transform: translateX(-250px);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-o-keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    99% {
+        opacity: 0;
+        transform: translateX(-250px);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    99% {
+        opacity: 0;
+        transform: translateX(-250px);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-ms-keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    99% {
+        opacity: 0;
+        transform: translateX(-250px);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    99% {
+        opacity: 0;
+        transform: translateX(-250px);
+    }
+    100% {
+        opacity: 0;
+    }
 }
 

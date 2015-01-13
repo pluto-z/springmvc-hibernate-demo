@@ -43,7 +43,7 @@ public class Radios extends UIBean {
       radios[i].evaluateParams();
       i++;
     }
-    if (null == this.value && radios.length > 0) this.value = radios[0].getValue();
+    if ((this.value == null || StringUtils.isBlank(this.value.toString())) && radios.length > 0) this.value = radios[0].getValue();
     this.value = booleanize(this.value);
 
   }

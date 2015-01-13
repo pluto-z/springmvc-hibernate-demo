@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class Form extends UIBean {
 
+	private String validateOutputMode = "tooltip";
 	protected String name;
 	protected String action;
 	protected String target;
@@ -110,6 +111,14 @@ public class Form extends UIBean {
 		return sb.toString();
 	}
 
+	public String getValidateOutputMode() {
+		return validateOutputMode;
+	}
+
+	public void setValidateOutputMode(String validateOutputMode) {
+		this.validateOutputMode = validateOutputMode;
+	}
+
 	public static class FormHead extends UIBean {
 
 		public FormHead(ComponentContext context) {
@@ -126,9 +135,9 @@ public class Form extends UIBean {
 
 	}
 
-	public static class FormFooter extends UIBean {
+	public static class FormFoot extends UIBean {
 
-		public FormFooter(ComponentContext context) {
+		public FormFoot(ComponentContext context) {
 			super(context);
 		}
 

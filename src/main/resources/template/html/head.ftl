@@ -19,5 +19,5 @@
 [#macro js_head]
 	[#local min][#if tag.compressed].min[#else][/#if][/#local]
 	<script type="text/javascript" src="${base}/static/plugins/jquery/jquery-1.11.1${min}.js"></script>
-	<script type="text/javascript" src="${base}/static/script/app.js"></script>
+	<script type="text/javascript" src="${base}/static/script/app.js?1"></script>
 [/#macro]

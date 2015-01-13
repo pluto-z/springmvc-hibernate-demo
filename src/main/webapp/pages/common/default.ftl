@@ -1,5 +1,5 @@
 [#if !login??]
-    [#if default_menus??]
+    [#if need_container?? && need_container]
         [@d.head/]
         [#include "navbar.ftl"/]
     <div class="wrapper ajaxcontainer" id="contentDiv">

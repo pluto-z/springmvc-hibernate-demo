@@ -134,7 +134,15 @@ public class TagLibrary {
 		return get(Form.FormBody.class);
 	}
 
-	public TagModel getFormfooter() {
-		return get(Form.FormFooter.class);
+	public TagModel getFormfoot() {
+		return get(Form.FormFoot.class);
+	}
+
+	public TagModel getField() {
+		return get(Field.class);
+	}
+
+	public TagModel getFlash() {
+		return get(Flash.class);
 	}
 }

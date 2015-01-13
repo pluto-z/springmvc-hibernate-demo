@@ -29,6 +29,7 @@
             self.load("bootbox");
             self.load("history");
             self.load("menu");
+            self.load("jqueryform");
             return self;
         },
         alert: function (msg) {
@@ -46,8 +47,8 @@
         },
         bar: {
             baseHref: null,
-            $el: null,
-            addMethod: 'edit',
+            bs_tableId: null,
+            addMethod: 'add',
             updateMethod: 'edit',
             deleteMethod: 'delete',
             retrieveMethod: 'info',
@@ -61,61 +62,62 @@
                     ids += this.value;
                 })
                 return ids;
-            }, init: function (el) {
+            }, init: function (bs_tableId) {
                 this.baseHref = History.getShortUrl(History.getBaseHref());
-                this.$el = el;
+                this.bs_tableId = bs_tableId;
             },
             addCreate: function () {
                 var self = this;
-                this.$el.bootstrapTable("addCreate", function () {
+                $("#"+this.bs_tableId).bootstrapTable("addCreate", function () {
                     d.go(self.baseHref + self.addMethod, d.container);
                 });
             },
             addRetrieve: function () {
                 var self = this;
-                this.$el.bootstrapTable("addRetrieve", function () {
-                    var id = self.getCheckedValue(self.$el.data("selectItemName"));
+                $("#"+self.bs_tableId).bootstrapTable("addRetrieve", function () {
+                    var id = self.getCheckedValue($("#"+self.bs_tableId).data("selectItemName"));
                     if (self.isMulti(id)) {
                         d.alert("请只选择一条操作");
                         return;
                     }
-                    d.go(self.baseHref + self.retrieveMethod, d.container);
+                    d.go(self.baseHref + self.retrieveMethod + "/" + id, d.container);
                 });
             },
             addUpdate: function () {
                 var self = this;
-                this.$el.bootstrapTable("addUpdate", function () {
-                    var id = self.getCheckedValue(self.$el.data("selectItemName"));
+               $("#"+self.bs_tableId).bootstrapTable("addUpdate", function () {
+                    var id = self.getCheckedValue($("#"+self.bs_tableId).data("selectItemName"));
                     if (self.isMulti(id)) {
                         bootbox.alert("请只选择一条操作");
                         return;
                     }
-                    d.go(self.baseHref + self.updateMethod, d.container);
+                    d.go(self.baseHref + self.updateMethod + "/" + id, d.container);
                 });
             },
             addDelete: function () {
                 var self = this;
-                this.$el.bootstrapTable("addDelete", function () {
-                    var id = self.getCheckedValue(self.$el.data("selectItemName"));
-                    if (id == '') {
+               $("#"+self.bs_tableId).bootstrapTable("addDelete", function () {
+                    var ids = self.getCheckedValue($("#"+self.bs_tableId).data("selectItemName"));
+                    if (ids == '') {
                         bootbox.alert("请至少选择一条操作");
                         return;
                     }
-                    d.go(self.baseHref + self.deleteMethod, d.container);
+                    d.go(self.baseHref + self.deleteMethod, d.container, {"entityIds": ids});
                 });
             }
         },
-        getBar: function (el) {
-            if (el != this.bar.$el) {
-                this.bar.init(el);
+        getBar: function (bs_tableId) {
+            if (null == this.bs_tableId || this.bs_tableId !== bs_tableId) {
+                this.bar.init(bs_tableId);
             }
             return this.bar;
         },
         history: {
-            recursiveStateWithHolder: function (state, stack, _stack) {
+            recursiveStateWithHolder: function (state, stack, _stack, count) {
+                count = count || 0;
                 _stack.unshift(state.id);
                 if ($(state.data.holder).length > 0) {
-                    return _stack;
+                    return count == 0 ? [] : _stack;
                 } else {
                     var idx = $.inArray(state.id, stack);
                     if (idx < 0) {
@@ -124,7 +126,7 @@
                         _stack.unshift(History.getRootStateId());
                         return _stack;
                     }
-                    return d.history.recursiveStateWithHolder(History.getStateById(stack[idx - 1]), stack, _stack);
+                    return d.history.recursiveStateWithHolder(History.getStateById(stack[idx - 1]), stack, _stack, count + 1);
                 }
             },
             navigationHandler: function (event, state) {
@@ -152,19 +154,21 @@
                         _stack = d.history.recursiveStateWithHolder(state, History.backwardStack, []);
                         for (var i = 0; i < _stack.length; i++) {
                             var _state = History.getStateById(_stack[i]);
-                            $.ajax({
-                                url: _state.url,
-                                cache: false,
-                                async: false,
-                                type: _state.data.type,
-                                dataType: "html",
-                                data: _state.data.params,
-                                complete: function (jqXHR) {
-                                    $(_state.data.holder).html(jqXHR.responseText);
-                                }
-                            }).complete(function () {
-                                if (i == 0) jQuery(window).trigger("daily.statechange", _state.url);
-                            })
+                            if (_state) {
+                                $.ajax({
+                                    url: _state.url,
+                                    cache: false,
+                                    async: false,
+                                    type: _state.data.type,
+                                    dataType: "html",
+                                    data: _state.data.params,
+                                    complete: function (jqXHR) {
+                                        $(_state.data.holder).html(jqXHR.responseText);
+                                    }
+                                }).complete(function () {
+                                    if (i == 0) jQuery(window).trigger("daily.statechange", _state.url);
+                                })
+                            }
                         }
                     }
                 }
@@ -196,6 +200,120 @@
                 History.Adapter.bind(window, "navigation-backward", d.history.navigationHandler);
             }
         },
+        isAjaxTarget: function (target) {
+            if (!target) return false;
+            if (target == "" || target == "_new" || target == "_blank" || target == "_self" || target == "_parent" || target == "_top") {
+                return false;
+            }
+            targetEle = document.getElementById(target);
+            if (!targetEle) return false;
+            tagName = targetEle.tagName.toLowerCase();
+            if (tagName == "iframe" || tagName == "object") {
+                return false;
+            }
+            return true;
+        },
+        normalTarget: function (target) {
+            if (target == "" || target == "new" || target == "_blank" || target == "_self" || target == "_parent") {
+                return target;
+            }
+            var targetObj = document.getElementById(target);
+            if (!targetObj || targetObj.tagName.toLowerCase() != "iframe") return "_self";
+            else return target;
+        },
+        findTarget: function (ele) {
+            var p = ele.parentNode, finalTarget = "_self";
+            while (p) {
+                if (p.id && p.className && (p.className.indexOf("contentDiv") > -1 )) {//||p.className.indexOf("ui-tabs-panel")>-1
+                    finalTarget = p.id;
+                    break;
+                } else {
+                    if (p == p.parentNode) p = null;
+                    else p = p.parentNode;
+                }
+            }
+            ele.target = finalTarget;
+            return finalTarget;
+        },
+        submit: function (myForm, action, target, onsubmit, ajax) {
+            var submitTarget, rs, origin_target, origin_action;
+            if ((typeof myForm) == 'string') myForm = $("#" + myForm);
+            myForm.trigger("validate");
+            var res = myForm.data("submit");
+            if (!res) {
+                return;
+            }
+            if (onsubmit) {
+                rs = null;
+                if (typeof onsubmit == "function") {
+                    try {
+                        rs = onsubmit(myForm[0]);
+                    } catch (e) {
+                        console.error(e.stackTrace());
+                        return;
+                    }
+                } else {
+                    rs = eval(onsubmit);
+                }
+                if (!rs) {
+                    return;
+                }
+            }
+            submitTarget = (null != target) ? target : myForm.attr("target");
+            if (!submitTarget) submitTarget = this.findTarget(myForm[0]);
+            if (action == null) action = myForm.attr("action");
+            if (action.indexOf("http://") == 0) action = action.substring(action.indexOf("/", 7));
+            if (null == ajax || ajax) ajax = this.isAjaxTarget(submitTarget);
+            if (ajax) {
+                var formId = myForm.attr("id");
+                if (null == formId || '' == formId) {
+                    myForm.attr("id", myForm.attr("name"));
+                }
+                this.ajaxSubmit(myForm.attr("id"), action, submitTarget);
+            } else {
+                origin_target = myForm.attr("target");
+                origin_action = myForm.attr("action");
+                myForm.attr("action", action).attr("target", this.normalTarget(submitTarget));
+                myForm[0].submit();
+                myForm.attr("action", origin_action).attr("target", origin_target);
+            }
+        }
+
+        ,
+        ajaxSubmit: function (formId, action, target) {
+            if (!action) action = document.getElementById(formId).action;
+            jQuery('#' + formId).ajaxForm({
+                success: function (result, statusCode, jqXHR) {
+                    try {
+                        jQuery('#' + target).html(result);
+                        var redirect_url = jqXHR.getResponseHeader("daily_redirect");
+                        if (redirect_url) {
+                            url = redirect_url;
+                            var redirect_param = jqXHR.getResponseHeader("params") || "{}";
+                            params = $.parseJSON(redirect_param);
+                        }
+                        History.pushState({
+                            holder: "#" + target,
+                            params: params,
+                            type: "POST",
+                            time: new Date().getTime()
+                        }, "", url);
+                    } catch (e) {
+                        console.error(e.stackTrace());
+                    }
+                },
+                error: function (response) {
+                    try {
+                        jQuery('#' + target).html(response.responseText);
+                    } catch (e) {
+                        console.error(e.stackTrace());
+                    }
+                },
+                url: action
+            });
+            jQuery('#' + formId).submit();
+        }
+        ,
         go: function (url, target, params, callback) {
             var self = this;
             params = params || {};
@@ -238,7 +356,9 @@
                         }
                     });
             }
-        }, require: function (files, callBack, basePath) {
+        }
+        ,
+        require: function (files, callBack, basePath) {
             var self = this, successFunction, path;
             successFunction = callBack || function () {
             };
@@ -265,7 +385,9 @@
                     async: false
                 });
             });
-        }, requireCss: function (cssFile, basePath) {
+        }
+        ,
+        requireCss: function (cssFile, basePath) {
             var self = this
             if (!self.styleCache[cssFile]) {
                 var path, cssref;
@@ -280,10 +402,24 @@
                 $css.appendTo($("head"));
                 self.styleCache[cssFile] = true;
             }
-        }, load: function (module, callback) {
+        }
+        ,
+        load: function (module, callback) {
             var self = this;
             switch (module) {
+                case "jcrop":
+                    self
+                        .requireCss("plugins/jcrop/css/jquery.Jcrop.min.css");
+                    self.require("plugins/jcrop/js/jquery.Jcrop.min.js");
+                    break;
+                case "jqueryform":
+                    self.require("plugins/jquery-form/jquery.form.min.js");
+                    break;
+                case "jsrender":
+                    self.require("plugins/jsrender/jsrender.min.js");
+                    break;
                 case "menu":
+                    self.require("plugins/jsrender/jsrender.min.js");
                     self.require("script/menu.js");
                     break;
                 case "bootstrap":
@@ -333,7 +469,7 @@
                         .require("plugins/bootstrap-table/extensions/cruds/bootstrap-table-crud.js");
                     self
                         .require(
-                        "plugins/bootstrap-table/extensions/filter/bootstrap-table-filter-ext.min.js",
+                        "plugins/bootstrap-table/extensions/filter/bootstrap-table-filter-ext.js",
                         callback);
                 default:
                     break;
@@ -364,7 +500,8 @@
             }
         }
     })
-}(jQuery, undefined);
+}
+(jQuery, undefined);
 
 !function () {
     var $ready = jQuery.prototype.ready;

@@ -51,7 +51,7 @@
         $("#${tag.id}").bootstrapTable();
     });
     [#if tag.hasScript]
-    var bar = _.getBar($('#${tag.id}'));
+    var bar = _.getBar("${tag.id}");
     ${tag.toolbarScript}
     [/#if]
 </script>

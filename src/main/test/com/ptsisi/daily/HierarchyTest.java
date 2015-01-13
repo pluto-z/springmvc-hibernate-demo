@@ -1,6 +1,6 @@
 package com.ptsisi.daily;
 
-import com.ptsisi.daily.model.MenuBean;
+import com.ptsisi.daily.model.Menu;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class HierarchyTest {
 
 	@Before
 	public void prepare() {
-		Menu parent = new MenuBean();
+		Menu parent = new Menu();
 		parent.setIndexNo(1);
 		Menu subMenu1 = setSubMenu(1, parent);
 		setSubMenu(2, parent);
@@ -23,7 +23,7 @@ public class HierarchyTest {
 	}
 
 	private Menu setSubMenu(int indexNo, Menu parent) {
-		Menu child = new MenuBean();
+		Menu child = new Menu();
 		child.setParent(parent);
 		child.setIndexNo(indexNo);
 		parent.getChildren().add(child);
